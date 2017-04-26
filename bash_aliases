@@ -20,3 +20,9 @@ alias gdb='gdb -q'
 alias go='gnome-open'
 alias taille='du -hs'
 alias ccat='pygmentize -g'
+
+# dev
+alias catkin_make='catkin_make -Dfreenect2_DIR=$HOME/.libs/freenect2/lib/cmake/freenect2/ -DNiTE2_DIR=$HOME/.libs/NiTE-Linux-x64-2.2/ -DCMAKE_BUILD_TYPE=Debug'
+alias rrskskn='rosrun skeleton_tracker skeleton_tracker_node'
+alias rrsksknb='rosrun --prefix "gdb -q run --args" skeleton_tracker skeleton_tracker_node'
+alias rrsksknv='rosrun --prefix "valgrind --leak-check=full" skeleton_tracker skeleton_tracker_node'
