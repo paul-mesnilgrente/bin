@@ -1,0 +1,58 @@
+# POWERLINE
+source /usr/local/lib/python2.7/dist-packages/powerline/bindings/tmux/powerline.conf
+set-option -g default-terminal "screen-256color"
+
+# Perosnal configuration
+unbind-key C-b
+bind-key C-a send-prefix
+set-option -g prefix C-s
+
+# keybindings
+unbind C-b
+unbind C-a
+unbind %
+unbind ,
+unbind .
+unbind n
+unbind p
+unbind [
+unbind '"'
+unbind l
+unbind &
+unbind "'"
+
+bind-key C-a    last-window
+bind-key |      split-window -h
+bind-key \      split-window -h
+bind-key -      split-window -v
+bind-key x      kill-pane
+bind-key X      kill-window
+bind-key q      confirm-before kill-session
+bind-key Q      confirm-before kill-server
+bind-key ,      previous-window # <
+bind-key .      next-window     # >
+bind-key <      swap-window -t :-
+bind-key >      swap-window -t :+
+bind-key n      command-prompt 'rename-window %%'
+bind-key N      command-prompt 'rename-session %%'
+bind-key Escape copy-mode -u
+bind-key Up     copy-mode -u
+bind-key r      source-file ~/.tmux.conf
+bind-key R      refresh-client
+bind-key a      send-key C-a
+bind-key C-l    resize-pane -L 5
+bind-key C-h    resize-pane -R 5
+bind-key C-j    resize-pane -D 5
+bind-key C-k    resize-pane -U 5
+
+# set window number start at 1
+set -g base-index 1
+
+# resize to smallest active client
+setw -g aggressive-resize off
+
+# enable mouse
+set-window-option -g mode-keys vi
+set -g terminal-overrides 'xterm*:smcup@:rmcup@'
+source "$HOME/.tmux.theme"
+

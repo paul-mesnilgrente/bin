@@ -1,0 +1,35 @@
+filetype off " required
+execute pathogen#infect()
+
+"All of your Plugins must be added before the following line
+filetype plugin indent on
+
+set number
+set paste
+set mouse=a
+set hlsearch
+syntax enable
+set autowrite
+set showmatch
+set nolazyredraw
+set tabstop=4     " show existing tab with 4 spaces width
+set shiftwidth=4  " when indenting with >, use 4 spaces width
+set expandtab     " On pressing tab, insert 4 spaces
+set backspace=indent,eol,start
+set splitbelow
+set splitright
+
+" POWERLINE
+set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim/
+set laststatus=2
+set t_Co=256
+
+" COLOR SCHEMES
+colorscheme Monokai
+
+" MARKDOWN : https://github.com/plasticboy/vim-markdown
+let g:vim_markdown_folding_disabled = 1
+
+" MARKDOWN PREVIEW : 
+let vim_markdown_preview_github=1
+
