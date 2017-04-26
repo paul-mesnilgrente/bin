@@ -1,0 +1,15 @@
+[color]
+    diff = auto
+    status = auto
+    branch = auto
+[user]
+    name = Paul Mesnilgrente
+    email = web@paul-mesnilgrente.com
+[alias]
+    ci = commit
+    co = checkout
+    st = status --short
+    br = branch
+    lg = log --graph --pretty=format:'%C(red)%h%Creset - %s %C(green)(%cr) %C(bold blue)<%an>%Creset%C(yellow)%d%Creset' --abbrev-commit
+[push]
+    default = simple
