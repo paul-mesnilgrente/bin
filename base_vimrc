@@ -33,3 +33,8 @@ let g:vim_markdown_folding_disabled = 1
 " MARKDOWN PREVIEW : 
 let vim_markdown_preview_github=1
 
+" OCTOL/VIM-CPP-ENHANCED-HIGHLIGHT
+let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_experimental_simple_template_highlight = 1
+let g:cpp_concepts_highlight = 1
