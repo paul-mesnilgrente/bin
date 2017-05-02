@@ -16,8 +16,8 @@ sudo pip install powerline-status
 wget https://github.com/Lokaltog/powerline/raw/develop/font/10-powerline-symbols.conf
 sudo mv 10-powerline-symbols.conf /etc/fonts/conf.d/
 
-if [ -f "$EXEC_DIR"/powerline-symbols.ttf ]; then
-    sudo cp "$EXEC_DIR"/powerline-symbols.ttf /usr/share/fonts/
+if [ -f "$EXEC_DIR"/assets/powerline-symbols.ttf ]; then
+    sudo cp "$EXEC_DIR"/assets/powerline-symbols.ttf /usr/share/fonts/
     sudo fc-cache -vf
 else
     # patch found on https://github.com/oconnor663/powerline-fontpacher
@@ -32,14 +32,14 @@ sudo fc-cache -vf
 ######################################################
 # Configure tmux                                     #
 ######################################################
-ln -s "$EXEC_DIR"/base_tmux_conf ~/.tmux.conf
-ln -s "$EXEC_DIR"/base_tmux_theme ~/.tmux.theme
+ln -s "$EXEC_DIR"/conf/base_tmux_conf ~/.tmux.conf
+ln -s "$EXEC_DIR"/conf/base_tmux_theme ~/.tmux.theme
 
 ######################################################
 # Configure vim                                      #
 ######################################################
 
-ln -s "$EXEC_DIR"/base_vimrc ~/.vimrc
+ln -s "$EXEC_DIR"/conf/base_vimrc ~/.vimrc
 # PATHOGEN
 mkdir -p ~/.vim/autoload ~/.vim/bundle
 curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
@@ -56,8 +56,8 @@ git clone https://github.com/octol/vim-cpp-enhanced-highlight.git ~/.vim/bundle/
 ######################################################
 # Configure bash                                     #
 ######################################################
-ln -s "$EXEC_DIR"/bash_aliases ~/.bash_aliases
-ln -s "$EXEC_DIR"/gitconfig ~/.gitconfig
+ln -s "$EXEC_DIR"/conf/bash_aliases ~/.bash_aliases
+ln -s "$EXEC_DIR"/conf/gitconfig ~/.gitconfig
 
 # POWERLINE for bash
 echo '
