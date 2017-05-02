@@ -32,14 +32,14 @@ sudo fc-cache -vf
 ######################################################
 # Configure tmux                                     #
 ######################################################
-ln -s "$EXEC_DIR"/conf/base_tmux_conf ~/.tmux.conf
-ln -s "$EXEC_DIR"/conf/base_tmux_theme ~/.tmux.theme
+ln -s "$EXEC_DIR"/conf/tmux.conf ~/.tmux.conf
+ln -s "$EXEC_DIR"/conf/tmux.theme ~/.tmux.theme
 
 ######################################################
 # Configure vim                                      #
 ######################################################
 
-ln -s "$EXEC_DIR"/conf/base_vimrc ~/.vimrc
+ln -s "$EXEC_DIR"/conf/vimrc ~/.vimrc
 # PATHOGEN
 mkdir -p ~/.vim/autoload ~/.vim/bundle
 curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
