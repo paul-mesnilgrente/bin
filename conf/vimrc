@@ -4,20 +4,20 @@ execute pathogen#infect()
 "All of your Plugins must be added before the following line
 filetype plugin indent on
 
-set number
-set paste
-set mouse=a
-set hlsearch
-syntax enable
-set autowrite
-set showmatch
-set nolazyredraw
-set tabstop=4     " show existing tab with 4 spaces width
-set shiftwidth=4  " when indenting with >, use 4 spaces width
-set expandtab     " On pressing tab, insert 4 spaces
 set backspace=indent,eol,start
-set splitbelow
-set splitright
+syntax enable      " color syntaxing
+set number         " print numbers on the side of the window
+set paste          " paste properly in insert mode
+set mouse=a        " enable the use of mouse for every mode
+set hlsearch       " highlight all matches when search
+set showmatch      " show the match (,{ etc.
+set splitbelow     " when using :sp insert the new file below
+set splitright     " when using :vsp insert the new file right
+set tabstop=4      " show existing tab with 4 spaces width
+set shiftwidth=4   " when indenting with >, use 4 spaces width
+set expandtab      " On pressing tab, insert 4 spaces
+set autowrite      " save when you change of window or tab
+au FocusLost * :wa " save when focus is lost
 
 " POWERLINE
 set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim/
@@ -36,5 +36,4 @@ let vim_markdown_preview_github=1
 " OCTOL/VIM-CPP-ENHANCED-HIGHLIGHT
 let g:cpp_class_scope_highlight = 1
 let g:cpp_member_variable_highlight = 1
-let g:cpp_experimental_simple_template_highlight = 1
 let g:cpp_concepts_highlight = 1
