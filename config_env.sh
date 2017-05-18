@@ -38,8 +38,8 @@ ln -s "$EXEC_DIR"/conf/tmux.theme ~/.tmux.theme
 ######################################################
 # Configure vim                                      #
 ######################################################
-
 ln -s "$EXEC_DIR"/conf/vimrc ~/.vimrc
+
 # PATHOGEN
 mkdir -p ~/.vim/autoload ~/.vim/bundle
 curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
@@ -47,11 +47,20 @@ curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 # COLORSCHEME
 git clone https://github.com/flazz/vim-colorschemes ~/.vim/bundle/vim-colorschemes
 
-# VIM-ROS
-git clone https://github.com/taketwo/vim-ros ~/.vim/bundle/vim-ros
-
 # C++11 highlighting
 git clone https://github.com/octol/vim-cpp-enhanced-highlight.git ~/.vim/bundle/vim-cpp-enhanced-highlight
+
+# MARDOWN Highlighting
+git clone https://github.com/plasticboy/vim-markdown ~/.vim/bundle/vim-markdown
+
+# MARDOWN Preview
+sudo pip install grip
+git clone https://github.com/JamshedVesuna/vim-markdown-preview ~/.vim/bundle/vim-markdown-preview
+
+######################################################
+# Configure octave                                   #
+######################################################
+ln -s "$EXEC_DIR"/conf/octaverc ~/.octaverc
 
 ######################################################
 # Configure bash                                     #

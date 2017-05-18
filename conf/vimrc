@@ -24,16 +24,16 @@ set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim/
 set laststatus=2
 set t_Co=256
 
-" COLOR SCHEMES
+" COLOR SCHEMES : https://github.com/flazz/vim-colorschemes
 colorscheme Monokai
 
-" MARKDOWN : https://github.com/plasticboy/vim-markdown
+" MARKDOWN Highlighting : https://github.com/plasticboy/vim-markdown
 let g:vim_markdown_folding_disabled = 1
 
-" MARKDOWN PREVIEW : 
+" MARKDOWN PREVIEW : https://github.com/JamshedVesuna/vim-markdown-preview
 let vim_markdown_preview_github=1
 
-" OCTOL/VIM-CPP-ENHANCED-HIGHLIGHT
+" CPP HIGHLIGHTING : https://github.com/octol/vim-cpp-enhanced-highlight
 let g:cpp_class_scope_highlight = 1
 let g:cpp_member_variable_highlight = 1
 let g:cpp_concepts_highlight = 1
