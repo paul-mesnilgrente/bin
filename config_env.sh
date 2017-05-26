@@ -50,8 +50,9 @@ git clone https://github.com/flazz/vim-colorschemes ~/.vim/bundle/vim-colorschem
 # C++11 highlighting
 git clone https://github.com/octol/vim-cpp-enhanced-highlight.git ~/.vim/bundle/vim-cpp-enhanced-highlight
 
-# MARDOWN Highlighting
+# MARDOWN Highlighting and commands
 git clone https://github.com/plasticboy/vim-markdown ~/.vim/bundle/vim-markdown
+git clone git://github.com/godlygeek/tabular.git ~/vim/bundle/tabular
 
 # MARDOWN Preview
 sudo pip install grip
@@ -75,3 +76,8 @@ if [ -f /usr/local/lib/python2.7/dist-packages/powerline/bindings/bash/powerline
     source /usr/local/lib/python2.7/dist-packages/powerline/bindings/bash/powerline.sh
 fi' >> ~/.bashrc
 
+######################################################
+# Configure mail signatures for thunderbird          #
+######################################################
+ln -s "$EXEC_DIR"/conf/pro_signature ~/.pro_signature
+ln -s "$EXEC_DIR"/conf/contact_signature ~/.contact_signature
