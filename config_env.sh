@@ -32,12 +32,14 @@ sudo fc-cache -vf
 ######################################################
 # Configure tmux                                     #
 ######################################################
+rm ~/.tmux.conf ~/.tmux.theme 2> /dev/null
 ln -s "$EXEC_DIR"/conf/tmux.conf ~/.tmux.conf
 ln -s "$EXEC_DIR"/conf/tmux.theme ~/.tmux.theme
 
 ######################################################
 # Configure vim                                      #
 ######################################################
+rm ~/.vimrc 2> /dev/null
 ln -s "$EXEC_DIR"/conf/vimrc ~/.vimrc
 
 # PATHOGEN
@@ -52,7 +54,7 @@ git clone https://github.com/octol/vim-cpp-enhanced-highlight.git ~/.vim/bundle/
 
 # MARDOWN Highlighting and commands
 git clone https://github.com/plasticboy/vim-markdown ~/.vim/bundle/vim-markdown
-git clone git://github.com/godlygeek/tabular.git ~/vim/bundle/tabular
+git clone git://github.com/godlygeek/tabular.git ~/.vim/bundle/tabular
 
 # MARDOWN Preview
 sudo pip install grip
@@ -61,11 +63,13 @@ git clone https://github.com/JamshedVesuna/vim-markdown-preview ~/.vim/bundle/vi
 ######################################################
 # Configure octave                                   #
 ######################################################
+rm ~/.octaverc 2> /dev/null
 ln -s "$EXEC_DIR"/conf/octaverc ~/.octaverc
 
 ######################################################
 # Configure bash                                     #
 ######################################################
+rm ~/.bash_aliases ~/.gitconfig 2> /dev/null
 ln -s "$EXEC_DIR"/conf/bash_aliases ~/.bash_aliases
 ln -s "$EXEC_DIR"/conf/gitconfig ~/.gitconfig
 
@@ -79,5 +83,6 @@ fi' >> ~/.bashrc
 ######################################################
 # Configure mail signatures for thunderbird          #
 ######################################################
+rm ~/.pro_signature ~/.contact_signature 2> /dev/null
 ln -s "$EXEC_DIR"/conf/pro_signature ~/.pro_signature
 ln -s "$EXEC_DIR"/conf/contact_signature ~/.contact_signature
