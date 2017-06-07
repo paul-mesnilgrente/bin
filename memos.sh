@@ -6,6 +6,7 @@ while [ 0 ]; do
     echo "    1. regex"
     echo "    2. vim"
     echo "    3. ros"
+    echo "    4. latex"
     echo "    q. quit"
 
     printf "Enter your choice: "
@@ -18,6 +19,9 @@ while [ 0 ]; do
         exit 0
     elif [ "$answer" = '3' ]; then
         cat $BASE_PATH/assets/memos/regex.md
+        exit 0
+    elif [ "$answer" = '4' ]; then
+        cat $BASE_PATH/assets/memos/latex.md
         exit 0
     elif [ "$answer" = 'q' ]; then
         echo "Goodbye!"
