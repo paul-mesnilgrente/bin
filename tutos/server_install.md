@@ -11,14 +11,10 @@ ssh-add ~/.ssh/id_rsa
 cat ~/.ssh/id_rsa.pub
 echo "Add the ssh key to your github account..."; read y
 git clone git@github.com:/paul-mesnilgrente/bin ~/bin
-export PATH=$PATH:$HOME/bin
 config_env.sh
-```
-
-## SSH
-
-```bash
-sudo apt install -y openssh-server
+export PATH=$PATH:$HOME/bin
+echo '
+export PATH=$PATH:$HOME/bin' > ~/.bashrc
 ```
 
 ## Serveur web
@@ -29,9 +25,17 @@ sudo apt install -y apache2 php mysql-server libapache2-mod-php php-mysql
 
 ## Symfony et composer
 
-- http://symfony.com/download
-- https://getcomposer.org/download/
-    - ne pas oublier les options --install-dir=$HOME/bin --filename=composer
+```bash
+# Symfony
+sudo mkdir -p /usr/local/bin
+sudo curl -LsS https://symfony.com/installer -o /usr/local/bin/symfony
+sudo chmod a+x /usr/local/bin/symfony
+
+# Composer
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+php composer-setup.php --install-dir=$HOME/bin --filename=composer
+php -r "unlink('composer-setup.php');"
+```
 
 ## NodeJS et NPM
 
@@ -51,6 +55,8 @@ sudo install -y software-properties-common
 sudo add-apt-repository -y ppa:certbot/certbot
 sudo apt update
 sudo apt install -y python-certbot-apache
+sudo a2enmod ssl
+sudo service apache2 restart
 
 # Each time there is a new website
 sudo certbot --apache
@@ -58,8 +64,7 @@ sudo certbot --apache
 sudo certbot renew --dry-run
 
 # Configure the CRON for automatic renewal every 15 minutes
-echo 'Add this CRON: */15 * * * * certbot renew'; read y;
-sudo crontab -e
+(crontab -l 2>/dev/null; echo "*/15 * * * * certbot renew") | sudo crontab -
 ```
 
 ## NextCloud
@@ -79,7 +84,7 @@ sudo apt install -y php-gd php-json php-mysql php-curl php-mbstring
 sudo apt install -y php-intl php-mcrypt php-imagick php-xml php-zip
 
 # install nextcloud
-cp -r nextcloud /var/www
+mv nextcloud /var/www/nextcloud
 echo '<VirtualHost *:80>
     ServerName nextcloud.paul-mesnilgrente.com
 
@@ -100,7 +105,7 @@ echo '<VirtualHost *:80>
     ErrorLog ${APACHE_LOG_DIR}/nextcloud_error.log
     CustomLog ${APACHE_LOG_DIR}/nextcloud_access.log combined
 </VirtualHost>' > /etc/apache2/sites-available/nextcloud.conf
-sudo a2ensite nextcloud
+sudo a2ensite nextcloud.conf
 
 # install required and recommanded modules
 sudo a2enmod rewrite
@@ -112,7 +117,6 @@ sudo a2enmod mime
 service apache2 restart
 
 # enable SSL
-sudo a2enmod ssl
 sudo certbot --apache -d nextcloud.paul-mesnilgrente.com
 sudo service apache2 reload
 
@@ -162,8 +166,7 @@ sudo service apache2 restart
 
 # CronJob
 sudo -u www-data /var/www/nextcloud/occ background:cron
-echo 'Add this cron: */15  *  *  *  * php -f /var/www/nextcloud/cron.php'; read y
-crontab -u www-data -e
+(crontab -l 2>/dev/null; echo "*/15  *  *  *  * php -f /var/www/nextcloud/cron.php") | crontab -u www-data -
 
 echo 'Set your email: admin@paul-mesnilgrente.com'
 echo 'Add this apps: Calendar, Contacts, Tasks'
@@ -203,11 +206,11 @@ database_password (null): q7dw9OKUpquh3eB7dw35GRqLxZkqZsDlDmFnPNx3CSRvG257hOG2oC
 database_path ('%kernel.root_dir%/../data/db/wallabag.sqlite'): ~
 database_table_prefix (wallabag_): 
 database_socket (null): 
-mailer_transport (smtp): gmail
-mailer_host (127.0.0.1): ~
-mailer_user (null): paul.mesnilgrente@gmail.com
-mailer_password (null): dyhdAtzan5hHpmSjny5XRBNRNrjkmvyUZw5hTzuv
-locale (en): fr
+mailer_transport (smtp): smtp
+mailer_host (127.0.0.1): mail.gandi.net
+mailer_user (null): contact@paul-mesnilgrente.com
+mailer_password (null): YXPQMv^fJ2UwdfW*uIOoSk49gtSbgpQe!%a!imAFmjHi4#miOkgG!AosqJaYY6znF534ssGTXgZ8@M4rRNWf2jR1I%f
+locale (en): 
 secret (ovmpmAWXRCabNlMgzlzFXDYmCFfzGv): 
 twofactor_auth (true): 
 twofactor_sender (no-reply@wallabag.org): 
@@ -274,9 +277,10 @@ sudo a2ensite wallabag.conf
 sudo service apache2 reload
 sudo certbot --apache -d wallabag.paul-mesnilgrente.com
 sudo certbot renew --dry-run
+
+echo "Navigate to the developper menu and create a client for firefox synchronization"; read y
 ```
 
-- Aller dans le menu développeur et créer un client pour pouvoir se synchroniser
 
 ## FreshRSS
 
@@ -324,11 +328,7 @@ sudo certbot --apache -d freshrss.paul-mesnilgrente.com
 ### Mise a jour automatique du contenu
 
 ```bash
-sudo crontab -u www-data -e
-# y ajouter la ligne suivante
-# */30 * * * * php /usr/share/FreshRSS/app/actualize_script.php
-# cette ligne permet de tester si ça marche
-sudo -u www-data php /usr/share/FreshRSS/app/actualize_script.php
+(crontab -l 2>/dev/null; echo "p*/30 * * * * hp /usr/share/FreshRSS/app/actualize_script.php") | crontab -u www-data -
 ```
 
 ### Synchronisation avec EasyRSS
@@ -357,13 +357,13 @@ sudo apt install -y postgresql postgresql-contrib
 // pour que la methode soit en md5 pour les 3 dernières lignes
 sudo /etc/init.d/postgresql restart
 sudo -i -u postgres
-createuser -P --interactive gitlab_user
-Enter password for new role: 
+echo 'Enter password for new role: 
 Enter it again: 
 Shall the new role be a superuser? (y/n) n
 Shall the new role be allowed to create databases? (y/n) y
-Shall the new role be allowed to create more new roles? (y/n) y
-createdb -O gitlab_user -E UTF8 db_gitlab
+Shall the new role be allowed to create more new roles? (y/n) y'
+createuser -P --interactive user-gitlab
+createdb -O user-gitlab -E UTF8 db_gitlab
 psql db_gitlab
 CREATE EXTENSION pg_trgm;
 deconnexion
@@ -570,9 +570,9 @@ gitlab_rails['smtp_domain'] = "paul-mesnilgrente.com"
 
 ```mysql
 CREATE DATABASE db_kanboard;
-CREATE USER "kanboard-user"@"localhost";
-SET password FOR "kanboard-user"@"localhost" = password("e6cnNdSL4fdVuzKAZ7HvEbAZoVQGx4Cz8kN5ZLgvF5yxO6dOJVN1IRo2RhI0OTQpy8lfD0w004uE1ZNgvIFGTplWIUZhPqHZW");
-GRANT ALL ON db_kanboard.* TO "kanboard-user"@"localhost";
+CREATE USER "user-kanboard"@"localhost";
+SET password FOR "user-kanboard"@"localhost" = password("e6cnNdSL4fdVuzKAZ7HvEbAZoVQGx4Cz8kN5ZLgvF5yxO6dOJVN1IRo2RhI0OTQpy8lfD0w004uE1ZNgvIFGTplWIUZhPqHZW");
+GRANT ALL ON db_kanboard.* TO "user-kanboard"@"localhost";
 ```
 
 ```bash
@@ -636,9 +636,9 @@ sudo chmod -R 0755 /var/www/piwik/tmp/templates_c/
 
 ```mysql
 CREATE DATABASE db_piwik;
-CREATE USER "piwik-user"@"localhost";
-SET password FOR "piwik-user"@"localhost" = password("QPuwV6ubLbNgkTr1pHdh7CnCr3aMWBlsSYQi0eII0NIh5Ji6eSrFlKznDr9MzdN4JF7MizmP9ppiMOrDanig9g");
-GRANT ALL ON db_piwik.* TO "piwik-user"@"localhost";
+CREATE USER "user-piwik"@"localhost";
+SET password FOR "user-piwik"@"localhost" = password("QPuwV6ubLbNgkTr1pHdh7CnCr3aMWBlsSYQi0eII0NIh5Ji6eSrFlKznDr9MzdN4JF7MizmP9ppiMOrDanig9g");
+GRANT ALL ON db_piwik.* TO "user-piwik"@"localhost";
 ```
 
 - aller sur la page nouvellement installer
@@ -671,8 +671,7 @@ host = localhost
 ```
 
 ```bash
-sudo crontab -e
-*/15 * * * * /home/paul/gandi-ddns/gandi-ddns.py
+(crontab -l 2>/dev/null; echo "*/15 * * * * /home/paul/gandi-ddns/gandi-ddns.py") | sudo crontab -
 ```
 
 ## Subsonic
@@ -730,9 +729,9 @@ mysql -u root -p
 
 ```mysql
 CREATE DATABASE db_sonerezh;
-CREATE USER "sonerezh-user"@"localhost";
-SET password FOR "sonerezh-user"@"localhost" = password("DUsXI0BrtBHSFCJQ5NFfRv9TQeAd9s33eFfaWau5O7OuK6I9YEHtqdcEKOM2615In5jI");
-GRANT ALL ON db_sonerezh.* TO "sonerezh-user"@"localhost";
+CREATE USER "user-sonerezh"@"localhost";
+SET password FOR "user-sonerezh"@"localhost" = password("DUsXI0BrtBHSFCJQ5NFfRv9TQeAd9s33eFfaWau5O7OuK6I9YEHtqdcEKOM2615In5jI");
+GRANT ALL ON db_sonerezh.* TO "user-sonerezh"@"localhost";
 ```
 
 ```bash
@@ -766,9 +765,9 @@ sudo apt install -y libav-tools
 
 ```mysql
 CREATE DATABASE db_ndli;
-CREATE USER "ndli-user"@"localhost";
-SET password FOR "ndli-user"@"localhost" = password("y1IcbShLpBrYayEyvVY2YQ5YXtam6C1bwNjHRQFWMA5Jdh1Degpndj1Wm9LwTMmcLr32y1dIlp2mCexV5");
-GRANT ALL ON db_ndli.* TO "ndli-user"@"localhost";
+CREATE USER "user-ndli"@"localhost";
+SET password FOR "user-ndli"@"localhost" = password("y1IcbShLpBrYayEyvVY2YQ5YXtam6C1bwNjHRQFWMA5Jdh1Degpndj1Wm9LwTMmcLr32y1dIlp2mCexV5");
+GRANT ALL ON db_ndli.* TO "user-ndli"@"localhost";
 ```
 
 ```bash
@@ -782,10 +781,6 @@ sudo chown -R www-data:www-data /var/www/nuit-info-2016/var
 sudo chown -R www-data:www-data /var/www/nuit-info-2016/bin
 sudo chown -R www-data:www-data /var/www/nuit-info-2016/app/config
 sudo chown -R www-data:www-data /var/www/nuit-info-2016/vendor
-cd /etc/apache2/sites-available/
-sudo vim ndli.conf
-sudo a2ensite ndli.conf
-sudo letsencrypt --apache -d ndli.paul-mesnilgrente.com
 ```
 
 ```xml
@@ -808,4 +803,9 @@ sudo letsencrypt --apache -d ndli.paul-mesnilgrente.com
     ErrorLog ${APACHE_LOG_DIR}/ndli_error.log
     CustomLog ${APACHE_LOG_DIR}/ndli_access.log combined
 </VirtualHost>
+```
+
+```bash
+sudo a2ensite ndli.conf
+sudo certbot --apache -d ndli.paul-mesnilgrente.com
 ```
