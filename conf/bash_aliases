@@ -1,7 +1,7 @@
 # package manager
 alias install='sudo apt install'
 alias update='sudo apt update'
-alias upgrade='sudo apt update && sudo apt upgrade'
+alias upgrade='sudo apt update && sudo apt upgrade -y'
 alias show='apt-cache show'
 alias search='apt-cache search'
 alias autoremove='sudo apt autoremove --purge'
