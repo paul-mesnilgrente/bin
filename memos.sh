@@ -18,7 +18,7 @@ while [ 0 ]; do
         cat $BASE_PATH/assets/memos/vim.md
         exit 0
     elif [ "$answer" = '3' ]; then
-        cat $BASE_PATH/assets/memos/regex.md
+        cat $BASE_PATH/assets/memos/ros.md
         exit 0
     elif [ "$answer" = '4' ]; then
         cat $BASE_PATH/assets/memos/latex.md
