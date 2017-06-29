@@ -21,6 +21,9 @@ alias go='gnome-open'
 alias taille='du -hs'
 alias ccat='pygmentize -g'
 
+# server
+alias occ='sudo -u www-data php /var/www/nextcloud/occ'
+
 # dev
 alias catkin_maked='catkin_make -Dfreenect2_DIR=$HOME/.libs/freenect2/lib/cmake/freenect2/ -DNiTE2_DIR=$HOME/.libs/NiTE-Linux-x64-2.2/ -DCMAKE_BUILD_TYPE=Debug'
 alias catkin_maket='catkin_make -Dfreenect2_DIR=$HOME/.libs/freenect2/lib/cmake/freenect2/ -DNiTE2_DIR=$HOME/.libs/NiTE-Linux-x64-2.2/ -DCMAKE_BUILD_TYPE=Debug run_tests_mario'
