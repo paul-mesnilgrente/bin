@@ -14,5 +14,4 @@ number=`expr $number % $nb_file`
 
 # get the filename and display
 filename=`echo $text | cut -d ' ' -f $number`
-echo "filename:" $filename
 fortune | cowsay -f $filename | lolcat
