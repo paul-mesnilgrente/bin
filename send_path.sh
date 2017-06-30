@@ -8,11 +8,8 @@ if [ $# -eq 2 ]; then
         exit 2
     fi
     chaine=`grep -e 'x: ' -e 'y: ' tmp | head -n 2 | tr -d ' '`
-    echo -e "chaine:" $chaine
     x_d=`echo $chaine | cut -d ' ' -f 1 | head -n 1 | cut -d ':' -f 2`
     y_d=`echo $chaine | cut -d ' ' -f 2 | tail -n 1 | cut -d ':' -f 2`
-    echo "x:" $x_d
-    echo "y:" $y_d
     x_e=$1
     y_e=$2
     rm tmp
