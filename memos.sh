@@ -1,32 +1,47 @@
 #!/bin/bash
 
 BASE_PATH=`dirname $0`
-while [ 0 ]; do
-    echo "What do you wanna see ?"
-    echo "    1. regex"
-    echo "    2. vim"
-    echo "    3. ros"
-    echo "    4. latex"
-    echo "    q. quit"
+MEMOS_PATH=`echo "$BASE_PATH"/assets/memos`
 
+function menu {
+    echo "What do you wanna see ?"
+
+    i=1
+    for file in `ls $MEMOS_PATH`; do
+        echo "    $i". "$file"
+        i=`expr $i + 1`
+    done
+
+    echo "    q. quit"
     printf "Enter your choice: "
-    read answer
-    if [ "$answer" = '1' ]; then
-        cat $BASE_PATH/assets/memos/regex.md
-        exit 0
-    elif [ "$answer" = '2' ]; then
-        cat $BASE_PATH/assets/memos/vim.md
-        exit 0
-    elif [ "$answer" = '3' ]; then
-        cat $BASE_PATH/assets/memos/ros.md
-        exit 0
-    elif [ "$answer" = '4' ]; then
-        cat $BASE_PATH/assets/memos/latex.md
-        exit 0
-    elif [ "$answer" = 'q' ]; then
+}
+
+function check_answer {
+    answer="$1"
+    if [ "$answer" = 'q' ]; then
         echo "Goodbye!"
         exit 0
-    else
-        echo "Invalid input."
+    elif [ ! "$answer" -eq "$answer" ] 2>/dev/null; then
+        echo "Your answer must be a positive number or 'q'"
+        exit 1
     fi
-done
+
+    nb_file=`ls "$MEMOS_PATH" | wc -l`
+    if [ "$answer" -eq 0 -o "$answer" -gt "$nb_file" ]; then
+        echo "Your answer must be between 1 and $nb_file".
+        exit 2
+    fi
+}
+
+function print_memo {
+    answer=$1
+    file=`ls "$MEMOS_PATH" | head -n "$answer" | tail -n 1`
+    cat "$MEMOS_PATH"/"$file"
+}
+
+menu
+read answer
+check_answer "$answer"
+print_memo "$answer"
+
+exit 0
