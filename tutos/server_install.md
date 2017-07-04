@@ -809,3 +809,41 @@ sudo chown -R www-data:www-data /var/www/nuit-info-2016/vendor
 sudo a2ensite ndli.conf
 sudo certbot --apache -d ndli.paul-mesnilgrente.com
 ```
+
+## Koel
+
+```mysql
+CREATE DATABASE db_koel;
+CREATE USER "user-koel"@"localhost";
+SET password FOR "user-koel"@"localhost" = password("...");
+GRANT ALL ON db_koel.* TO "user-koel"@"localhost";
+```
+
+```bash
+sudo npm install -g yarn
+cd ~
+git clone git@github.com:phanan/koel
+cd koel
+git checkout v3.6.2
+composer install
+php artisan koel:init
+echo "Change the values in .env"; read y
+mv nuit-info-2016 /var/www/
+sudo chown -R www-data:www-data /var/www/koel
+```
+
+```xml
+<VirtualHost *:80>
+    ServerName koel.paul-mesnilgrente.com
+
+    DocumentRoot /var/www/koel/web
+
+    ErrorLog ${APACHE_LOG_DIR}/koel_error.log
+    CustomLog ${APACHE_LOG_DIR}/koel_access.log combined
+</VirtualHost>
+```
+
+```bash
+sudo a2ensite koel.conf
+sudo certbot --apache -d koel.paul-mesnilgrente.com
+```
