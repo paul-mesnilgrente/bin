@@ -828,7 +828,7 @@ git checkout v3.6.2
 composer install
 php artisan koel:init
 echo "Change the values in .env"; read y
-mv nuit-info-2016 /var/www/
+mv koel /var/www/
 sudo chown -R www-data:www-data /var/www/koel
 ```
 
@@ -837,6 +837,11 @@ sudo chown -R www-data:www-data /var/www/koel
     ServerName koel.paul-mesnilgrente.com
 
     DocumentRoot /var/www/koel/web
+    <Directory /var/www/koel>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride All
+        Require all granted
+    </Directory>
 
     ErrorLog ${APACHE_LOG_DIR}/koel_error.log
     CustomLog ${APACHE_LOG_DIR}/koel_access.log combined
