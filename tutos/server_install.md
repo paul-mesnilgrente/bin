@@ -866,6 +866,8 @@ php artisan koel:init
 echo "Change the values in .env"; read y
 mv koel /var/www/
 sudo chown -R www-data:www-data /var/www/koel
+# run an update of the library at midnight
+(crontab -l 2>/dev/null; echo "0 0 * * * cd /var/www/koel/ && php artisan koel:sync > /dev/null 2>&1") | sudo crontab -
 ```
 
 ```xml
