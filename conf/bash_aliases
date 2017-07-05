@@ -1,7 +1,7 @@
 # package manager
 alias install='sudo apt install'
 alias update='sudo apt update'
-alias upgrade='sudo apt update && sudo apt upgrade'
+alias upgrade='sudo apt update && sudo apt upgrade -y'
 alias show='apt-cache show'
 alias search='apt-cache search'
 alias autoremove='sudo apt autoremove --purge'
@@ -21,10 +21,12 @@ alias go='gnome-open'
 alias taille='du -hs'
 alias ccat='pygmentize -g'
 
+# server
+alias occ='sudo -u www-data php /var/www/nextcloud/occ'
+
 # dev
-alias catkin_maked='catkin_make -Dfreenect2_DIR=$HOME/.libs/freenect2/lib/cmake/freenect2/ -DNiTE2_DIR=$HOME/.libs/NiTE-Linux-x64-2.2/ -DCMAKE_BUILD_TYPE=Debug'
-alias catkin_maket='catkin_make -Dfreenect2_DIR=$HOME/.libs/freenect2/lib/cmake/freenect2/ -DNiTE2_DIR=$HOME/.libs/NiTE-Linux-x64-2.2/ -DCMAKE_BUILD_TYPE=Debug run_tests_mario'
-alias catkin_make='catkin_make -Dfreenect2_DIR=$HOME/.libs/freenect2/lib/cmake/freenect2/ -DNiTE2_DIR=$HOME/.libs/NiTE-Linux-x64-2.2/ -DCMAKE_BUILD_TYPE=Release'
-alias rrskskn='rosrun skeleton_tracker skeleton_tracker_node'
-alias rrsksknb='rosrun --prefix "gdb -q run --args" skeleton_tracker skeleton_tracker_node'
-alias rrsksknv='rosrun --prefix "valgrind --leak-check=full" skeleton_tracker skeleton_tracker_node'
+alias catkin_maked='catkin_make -DCMAKE_BUILD_TYPE=Debug'
+alias catkin_maket='catkin_make -DCMAKE_BUILD_TYPE=Debug run_tests_mario'
+alias catkin_make='catkin_make  -DCMAKE_BUILD_TYPE=Release'
+alias rrd='rosrun --prefix "gdb -q run --args"'
+alias rrv='rosrun --prefix "valgrind --leak-check=full"'

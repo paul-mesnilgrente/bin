@@ -5,7 +5,7 @@ EXEC_DIR=`dirname "$0"`
 ######################################################
 # Install prerequisities                             #
 ######################################################
-sudo apt install -y python-pip tmux curl vim-nox-py2
+sudo apt install -y python-pip tmux curl
 sudo pip install --upgrade pip
 
 ######################################################

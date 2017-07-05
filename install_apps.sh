@@ -246,7 +246,7 @@ read y
 
 echo "Installation de npm (automatique) : "
 sudo npm install npm -g
-sudo chown -R $USER:$(id -gn $USER) /home/pauka/.config
+sudo chown -R $USER:$(id -gn $USER) $HOME/.config
 sudo npm install less -g
 
 
