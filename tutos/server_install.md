@@ -809,3 +809,39 @@ sudo chown -R www-data:www-data /var/www/nuit-info-2016/vendor
 sudo a2ensite ndli.conf
 sudo certbot --apache -d ndli.paul-mesnilgrente.com
 ```
+
+## Transmission
+
+```bash
+sudo apt install transmission-cli transmission-common transmission-daemon
+sudo service transmission-daemon stop
+echo 'Set:'
+echo '    rpc-password": "<password>",'
+echo '    rpc-username": "paul-transmission"'
+echo '    rpc-whitelist-enabled": false,"'
+echo '    blocklist-enabled": true,'
+echo '    blocklist-url": "http://list.iblocklist.com/?list=bt_level1&fileformat=p2p&archiveformat=gz",'
+echo '    http://list.iblocklist.com/?list=bt_level1&fileformat=p2p&archiveformat=gz"'
+read y
+sudo service transmission-daemon start
+
+sudo a2enmod proxy proxy_ajp proxy_http rewrite deflate headers
+sudo a2enmod proxy_balancer proxy_connect proxy_html
+```
+
+```xml
+<VirtualHost *:80>
+    ServerName transmission.paul-mesnilgrente.com
+
+    ProxyPass "/" "http://transmission.paul-mesnilgrente.com:9091/"
+    ProxyPassReverse "/" "http://transmission.paul-mesnilgrente.com:9091/"
+
+    ErrorLog ${APACHE_LOG_DIR}/transmission_error.log
+    CustomLog ${APACHE_LOG_DIR}/transmission_access.log combined
+</VirtualHost>
+```
+
+```bash
+sudo a2ensite transmission.conf
+sudo certbot --apache -d transmission.paul-mesnilgrente.com
+```
