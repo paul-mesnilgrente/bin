@@ -65,14 +65,7 @@ echo '
 # Ajout du ppa de owncloud #
 ############################
 '
-# pour ubuntu 16.04
-wget -nv http://download.opensuse.org/repositories/isv:ownCloud:desktop/Ubuntu_16.04/Release.key -O Release.key
-sudo apt-key add - < Release.key
-rm Release.key
-sudo apt update
-
-sudo sh -c "echo 'deb http://download.opensuse.org/repositories/isv:/ownCloud:/desktop/Ubuntu_16.04/ /' > /etc/apt/sources.list.d/owncloud-client.list"
-
+sudo add-apt-repository -y ppa:nextcloud-devs/client
 echo '
 #############################
 # Ajout du ppa de darktable #
@@ -109,7 +102,7 @@ gparted \
 libreoffice-java-common \
 oracle-java8-installer \
 git \
-owncloud-client owncloud-client-nautilus \
+nextcloud-client nextcloud-client-nautilus \
 curl libgnome2-bin \
 darktable python-pygments"
 
