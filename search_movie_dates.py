@@ -31,6 +31,18 @@ def progress_bar(iteration, total, prefix='', suffix='', decimals=1, length=100,
     if iteration == total: 
         print()
 
+def get_movie_list_by_file(path2file):
+    file = open(path2file)
+    return file.read().splitlines()
+
+def get_movie_list_by_path(path):
+    dirs = os.listdir()
+    res = []
+    for folder in dirs:
+        if folder[len(folder)-1] != ')':
+            res.append(folder)
+    return res
+
 def init_connection():
     conn = http.client.HTTPSConnection("api.themoviedb.org")
     return conn
@@ -105,8 +117,10 @@ if __name__ == '__main__':
     api_key = "aa898267ad6c91cf89ae0c2afaf167c2"
     conn = init_connection()
 
-    file = open(sys.argv[1])
-    lines = file.read().splitlines()
+    if len(sys.argv) == 2:
+        lines = get_movie_list_by_file(sys.argv[1])
+    else:
+        lines = get_movie_list_by_path('.')
     l = len(lines)
     movies = {}
     progress_bar(0, l, prefix = 'Searching:', length = 50)
