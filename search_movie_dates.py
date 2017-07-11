@@ -74,7 +74,7 @@ def construct_movie_search_url(api_key, movie):
 def search_movie(conn, api_key, movie):
     """
     Search for movies with title @param movie
-    @return dict[id] = (title, date)
+    @return dict[id] = json_data[]
     """
     url = construct_movie_search_url(api_key, movie)
     json_data = get_json_data(conn, url)
@@ -83,7 +83,7 @@ def search_movie(conn, api_key, movie):
         json_data = get_json_data(conn, url)
     res = {}
     for id, result in enumerate(json_data["results"]):
-        res[id] = (result["title"], result["release_date"])
+        res[id] = result
     return res
 
 def choose_date(movie, results):
@@ -96,14 +96,16 @@ def choose_date(movie, results):
     # os.system('clear')
     print(movie, ":", sep="")
     if len(results) == 1:
-        return results[0][1].split("-")[0]
+        return results[0]["release_date"].split("-")[0]
     for key in results:
-        print("    ", key, ". ", results[key][0], " (", results[key][1], ")", sep="")
+        print("    ", key, ". ", results[key]["title"], sep="", end="")
+        print(" (", results[key]["release_date"], ")", sep="", end="")
+        print(" https://www.themoviedb.org/movie/", results[key]["id"], sep="")
     print("    n.", "None")
     answer = input('--> ')
     if answer == "n":
         return None
-    return results[int(answer)][1].split("-")[0]
+    return results[int(answer)]["release_date"].split("-")[0]
 
 def rename_file(filename, date):
     if date == None:
@@ -131,7 +133,7 @@ if __name__ == '__main__':
 
     for movie in movies:
         if len(movies[movie]) == 0:
-            print("No results")
+            print('No results for "', movie, '"', sep='')
         else:
             date = choose_date(movie, movies[movie])
             rename_file(movie, date)
