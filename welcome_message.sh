@@ -10,7 +10,7 @@ nb_file=`echo $text | wc -w`
 # +1 to have the possibility to pick the last file
 nb_file=`expr $nb_file + 1`
 number=0
-while [ "$number" -eq 0 ]; do
+while [ "$number" -eq 0 ]; do
     number=$RANDOM
     number=`expr $number % $nb_file`
 done
