@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # get files
-nb_line=`cowsay -l | wc -l`
+nb_line=`/usr/games/cowsay -l | wc -l`
 nb_line=`expr $nb_line - 1`
-text=`cowsay -l | tail -n $nb_line`
+text=`/usr/games/cowsay -l | tail -n $nb_line`
 
 # pick one random index file
 nb_file=`echo $text | wc -w`
@@ -17,4 +17,4 @@ done
 
 # get the filename and display
 filename=`echo $text | cut -d ' ' -f $number`
-fortune | cowsay -f $filename | lolcat
+/usr/games/fortune | /usr/games/cowsay -f $filename | /usr/games/lolcat
