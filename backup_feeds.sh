@@ -37,7 +37,7 @@ if [ $? -ne 0 ]; then
     echo "HINT: Verify the username (username: $username)."
     usage
     sendmail.php "Paul Mesnilgrente <web@paul-mesnilgrente.com>" \
-                 "[ERROR]FreshRSS Backup" \
+                 "[ERROR]FreshRSS Backup for $username" \
                  "ERROR while exporting OPML for user \"$username\"."
     exit 2
 fi
@@ -48,14 +48,16 @@ if [ "$force" = "false" ]; then
         grep -v '<dateCreated>' "$filepath_save" > "$filepath_tmp2"
         diff "$filepath_tmp1" "$filepath_tmp2"
         if [ $? -eq 0 ]; then
-            echo "Nothing to update"
+            sendmail.php "Paul Mesnilgrente <web@paul-mesnilgrente.com>" \
+                 "[$username]FreshRSS Backup -> up to date" \
+                 "Already up to date."
             exit 0
         fi
     fi
 fi
 
 sendmail.php "Paul Mesnilgrente <web@paul-mesnilgrente.com>" \
-             "FreshRSS Backup" \
+             "[$username]FreshRSS Backup -> changed" \
              "backup" \
              "$filepath"
 
