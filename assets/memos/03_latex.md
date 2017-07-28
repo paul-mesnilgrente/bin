@@ -8,7 +8,7 @@ Symbole mathématiques
 |:------------------|:----------------------|:----------------------|
 | équivalent/modulo | `\equiv`              | $\equiv$              |
 | rond              | `\stackrel{\circ}{X}` | $\stackrel{\circ}{X}$ |
-| somme             | `\sum_\limits{i=1}^n` | $\sum_\limits{i=1}^n$ |
+| somme             | `\sum\limits_{i=1}^n` | $\sum\limits_{i=1}^n$ |
 | vide              | `\emptyset`           | $\emptyset$           |
 
 Alphabet grec
@@ -41,6 +41,19 @@ Alphabet grec
 | psi     | `\psi`               | $\psi$              | `\Psi`               | $\Psi$     |
 | omega   | `\omega`             | $\omega$            | `\Omega`             | $\Omega$   |
 
-Divers
+Hierarchy
 ------
 
+```latex
+\chapter{Introduction}
+This chapter's content...
+
+\section{Structure}
+This section's content...
+
+\subsection{Top Matter}
+This subsection's content...
+
+\subsubsection{Article Information}
+This subsubsection's content...
+```
