@@ -50,8 +50,6 @@ password=`tail -n 1 "$credential"`
 
 filepath="/home/$username.vcf"
 filepath_save="/home/.$username.vcf"
-filepath_tmp1="/home/$username.vcf.tmp1"
-filepath_tmp2="/home/$username.vcf.tmp2"
 wget --user "$username" --password "$password" "$url" -O "$filepath"
 if [ $? -ne 0 ]; then
     echo ""
@@ -75,6 +73,7 @@ if [ "$force" = "false" ]; then
             sendmail.php "Paul Mesnilgrente <web@paul-mesnilgrente.com>" \
                  "[$username]Contacts Backup -> up to date" \
                  "Already up to date."
+            mv "$filepath" "$filepath_save"
             exit 0
         fi
     fi
@@ -86,6 +85,5 @@ sendmail.php "Paul Mesnilgrente <web@paul-mesnilgrente.com>" \
              "$filepath"
 
 mv "$filepath" "$filepath_save"
-rm "$filepath_tmp1" "$filepath_tmp2" 2> /dev/null
 
 exit 0
