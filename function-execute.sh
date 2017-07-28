@@ -1,5 +1,6 @@
 commandNum=0
-function execute() {
+function execute
+{
 	commandNum=`expr $commandNum + 1`
 	# echo "$1"
 	command="$1"

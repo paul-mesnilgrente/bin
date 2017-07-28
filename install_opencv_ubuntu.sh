@@ -1,39 +1,29 @@
 #!/bin/bash
 
-cd ~
+path2opencv="~/.libs"
+mkdir "$path2opencv" 2> /dev/null
+cd "$path2opencv"
 
-sudo apt update && sudo apt upgrade
-if [ $? -ne 0 ] ; then
-    echo ""
-    echo "######################################"
-    echo "# Erreur update && upgrade           #"
-    echo "######################################"
-    echo ""
-    exit 1
-else
-    echo ""
-    echo "######################################"
-    echo "# Update && upgrade OK               #"
-    echo "######################################"
-    echo ""
-fi
+function check_result
+{
+    if [ $1 -eq $2 ]; then
+        presult.sh -s "OK: $3"
+    else
+        presult.sh -f "ERROR:" "$3"
+        exit $4
+    fi
+}
 
-sudo apt install build-essential \
+sudo apt update && sudo apt upgrade; check_result $? 0 "update && upgrade" 1
+
+sudo apt install build-essential cmake git pkg-config \
                  python-numpy python3-numpy python-dev python3-dev \
-                 cmake \
-                 git \
-                 libgtkgl2.0-dev \
-                 libgtk2.0-dev \
-                 pkg-config \
-                 libavcodec-dev \
-                 libavformat-dev \
+                 libgtkgl2.0-dev libgtk2.0-dev \
+                 libavcodec-dev libavformat-dev \
                  libswscale-dev \
                  libvtk6-dev \
-                 libtbb2 \
-                 libtbb-dev \
-                 libjpeg-dev \
-                 libpng-dev \
-                 libtiff-dev \
+                 libtbb2 libtbb-dev \
+                 libjpeg-dev libpng-dev libtiff-dev \
                  libjasper-dev \
                  libdc1394-22-dev \
                  libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
@@ -42,142 +32,36 @@ sudo apt install build-essential \
                  v4l-utils ffmpeg libgdcm2-dev \
                  libeigen3-dev libgflags-dev libgoogle-glog-dev \
                  libsuitesparse-dev libatlas-base-dev \
-                 ant libv4l-dev doxygen nvidia-cuda-toolkit libqt4-dev
-if [ $? -ne 0 ] ; then
-    echo ""
-    echo "######################################"
-    echo "# Erreur install dépendances         #"
-    echo "######################################"
-    echo ""
-    exit 2
-else
-    echo ""
-    echo "######################################"
-    echo "# Installation des librairies OK     #"
-    echo "######################################"
-    echo ""
-fi
+                 ant libv4l-dev doxygen libqt4-dev \
+                 nvidia-cuda-toolkit
+check_result $? 0 "apt install dependencies" 2
 
-git clone https://github.com/opencv/opencv
-if [ $? -ne 0 ] ; then
-    echo ""
-    echo "######################################"
-    echo "# Erreur récupération OpenCV         #"
-    echo "######################################"
-    echo ""
-    exit 2
-else
-    echo ""
-    echo "######################################"
-    echo "# Téléchargement OpenCV OK           #"
-    echo "######################################"
-    echo ""
-fi
+git clone https://github.com/opencv/opencv; check_result $? 0 "git clone opencv" 3
 
-git clone https://github.com/opencv/opencv_contrib
-if [ $? -ne 0 ] ; then
-    echo ""
-    echo "######################################"
-    echo "# Erreur récupération OpenCV Contrib #"
-    echo "######################################"
-    echo ""
-    exit 2
-else
-    echo ""
-    echo "######################################"
-    echo "# Téléchargement OpenCV_Contrib OK   #"
-    echo "######################################"
-    echo ""
-fi
+git clone https://github.com/opencv/opencv_contrib; check_result $? 0 "git clone opencv_contrib" 4
 
-mkdir opencv/build
+mkdir opencv/build; check_result $? 0 "create opencv/build" 5
+
 cd opencv/build
+
 cmake -D BUILD_EXAMPLES=ON \
       -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
       -D CMAKE_INSTALL_PREFIX=/usr/local \
       -D CMAKE_BUILD_TYPE=DEBUG \
-      ..
-if [ $? -ne 0 ] ; then
-    echo ""
-    echo "######################################"
-    echo "# Erreur cmake                       #"
-    echo "######################################"
-    echo ""
-    exit 3
-else
-    echo ""
-    echo "######################################"
-    echo "# Configuration CMake OK             #"
-    echo "######################################"
-    echo ""
-fi
+      ..; check_result $? 0 "local cmake with options" 6
 
-make -j4
-if [ $? -ne 0 ] ; then
-    echo ""
-    echo "######################################"
-    echo "# Erreur make -j4                    #"
-    echo "######################################"
-    echo ""
-    exit 4
-else
-    echo ""
-    echo "######################################"
-    echo "# Compilation dépendances OK         #"
-    echo "######################################"
-    echo ""
-fi
+make -j4; check_result $? 0 "make -j4" 7
 
-sudo make install
-if [ $? -ne 0 ] ; then
-    echo ""
-    echo "######################################"
-    echo "# Erreur make install                #"
-    echo "######################################"
-    echo ""
-    exit 5
-else
-    echo ""
-    echo "######################################"
-    echo "# Installation dans /usr/local OK    #"
-    echo "######################################"
-    echo ""
-fi
+sudo make install; check_result $? 0 "make install" 8
 
-sudo ldconfig
+sudo ldconfig; check_result $? 0 "ldconfig" 9
 
-cd ~
-g++ -ggdb `pkg-config --cflags opencv` -o contours2 opencv/samples/cpp/contours2.cpp `pkg-config --libs opencv`
-if [ $? -ne 0 ] ; then
-    echo ""
-    echo "######################################"
-    echo "# Erreur compile                     #"
-    echo "######################################"
-    echo ""
-    exit 6
-else
-    echo ""
-    echo "######################################"
-    echo "# Compilation OK                     #"
-    echo "######################################"
-    echo ""
-fi
+cd "$path2opencv"
+g++ -ggdb `pkg-config --cflags opencv` \
+    -o contours2 opencv/samples/cpp/contours2.cpp \
+    `pkg-config --libs opencv`;
+check_result $? 0 "example compilation" 10
 
-./contours2
-if [ $? -ne 0 ] ; then
-    echo ""
-    echo "######################################"
-    echo "# Échec du test                      #"
-    echo "######################################"
-    echo ""
-    exit 7
-else
-    echo "######################################"
-    echo "# Ça marche !!!!!                    #"
-    echo "######################################"
-    echo ""
-fi
+./contours2; check_result $? 0 "execution of the test program" 11
 
-rm -rf opencv opencv_contrib contours2
-
-exit 0;
+exit 0
