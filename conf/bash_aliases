@@ -21,6 +21,7 @@ alias octave-cli='octave-cli -q'
 alias go='gnome-open'
 alias taille='du -hs'
 alias ccat='pygmentize -g'
+alias ppath='echo $PATH | tr ":" "\n"'
 
 # server
 alias occ='sudo -u www-data php /var/www/nextcloud/occ'
