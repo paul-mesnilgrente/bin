@@ -51,6 +51,8 @@ if [ "$force" = "false" ]; then
             sendmail.php "Paul Mesnilgrente <web@paul-mesnilgrente.com>" \
                  "[$username]FreshRSS Backup -> up to date" \
                  "Already up to date."
+            mv "$filepath" "$filepath_save"
+            rm "$filepath_tmp1" "$filepath_tmp2" 2> /dev/null
             exit 0
         fi
     fi
