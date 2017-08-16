@@ -78,3 +78,8 @@ Copy/Paste this folder to have the mario motors `C:\Workspace\MapperAPI`
         - `ST2Controller` -> `mario\trunk\r2m\Speech2Text`,
 - Change the following file: `C:\Natlink\Natlink\Macrosystem\_S2TEngine.py` by this `mario\trunk\r2m\Speech2Text\_S2TEngine.py`
 - Run the apps: double click on `Desktop\current\launchMARIO\launchMARIO.bat`
+
+# Notes
+
+- eth0: 192.168.1.46, 192.168.1.255, 255.255.255.0
+- wlan0: 10.130.3.19, 10.130.3.255, 255.255.255.0
