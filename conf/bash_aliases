@@ -14,6 +14,7 @@ alias sy_gf='sy doctrine:generate:form'
 alias sy_ges='sy doctrine:generate:entities'
 alias sy_clearp='sy cache:clear --env=prod'
 alias sy_cleard='sy cache:clear --env=dev'
+alias sy_load_fixt='sy doctrine:fixtures:load'
 
 # divers
 alias gdb='gdb -q'
