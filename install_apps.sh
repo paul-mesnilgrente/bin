@@ -152,69 +152,13 @@ function set-title(){
 }
 ' >> ~/.bashrc
 
-echo "# package manager
-alias install='sudo apt install'
-alias update='sudo apt update'
-alias upgrade='sudo apt update && sudo apt upgrade'
-alias show='apt-cache show'
-alias search='apt-cache search'
-alias autoremove='sudo apt autoremove --purge'
-
-# symfony
-alias sy='php bin/console'
-alias sy_dbupdate='sy doctrine:schema:update'
-alias sy_ge='sy doctrine:generate:entity'
-alias sy_gf='sy doctrine:generate:form'
-alias sy_ges='sy doctrine:generate:entities'
-alias sy_clearp='sy cache:clear --env=prod'
-alias sy_cleard='sy cache:clear --env=dev'
-
-# divers
-alias gdb='gdb -q'
-alias go='gnome-open'
-alias taille='du -hs'
-alias ccat='pygmentize -g'" >> ~/.bash_aliases
-
-echo "[color]
-    diff = auto
-    status = auto
-    branch = auto
-[user]
-    name = Paul Mesnilgrente
-    email = web@paul-mesnilgrente.com
-[alias]
-    ci = commit
-    co = checkout
-    st = status --short
-    br = branch
-    lg = log --graph --pretty=format:'%C(red)%h%Creset - %s %C(green)(%cr) %C(bold blue)<%an>%Creset%C(yellow)%d%Creset' --abbrev-commit
-[push]
-    default = simple" >> ~/.gitconfig
-
-echo 'Installation de vim et configuration...'
-
-
-echo 'syntax on
-set background=dark
-set number
-set showcmd
-set mouse=a
-set hidden
-set autowrite
-set showmatch
-filetype plugin indent on
-" show existing tab with 4 spaces width
-set tabstop=4
-" when indenting with >, use 4 spaces width
-set shiftwidth=4
-" On pressing tab, insert 4 spaces
-set expandtab' > ~/.vimrc
-
+# Configuration of sublime text
 echo '{
     "ensure_newline_at_eof_on_save": true,
     "word_wrap": false,
 }' > "$HOME/.config/sublime-text-3/Packages/User/Preferences.sublime-settings"
 
+# Tip for dropbox
 echo "fs.inotify.max_user_watches = 524288" | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p
 
