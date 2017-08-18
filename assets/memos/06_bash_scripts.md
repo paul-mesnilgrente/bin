@@ -22,3 +22,7 @@ Avoid OVH blacklist: `--geo-bypass`
 Avoid spaces in filenames: `--restrict-filenames`
 Download mp3: `--extract-audio --audio-format mp3`
 Download playlist: `--yes-playlist` `--playlist-items 1-3,7,10-15`
+
+## PDF
+
+pdftk A=contract.pdf B=signed.pdf cat A1-3 B1 output contract_signed.pdf
