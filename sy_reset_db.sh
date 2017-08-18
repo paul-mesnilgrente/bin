@@ -17,4 +17,4 @@ write_step 'Create the schema...'
 php bin/console doctrine:schema:update --force
 
 write_step 'Loading the data...'
-echo y | php bin/console doctrine:fixture:load
+echo y | php bin/console doctrine:fixture:load -v
