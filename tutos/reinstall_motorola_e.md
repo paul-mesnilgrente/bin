@@ -117,13 +117,14 @@ Source: https://wiki.lineageos.org/devices/condor
     - APV PDF Viewer
     - DAVdroid (will propose to install OpenTasks, Groups are per contact categories)
     - OpenTasks
-    - K-9 Mail
-        - Accounts
-        - Signatures
-    - Barcode Scanner
     - OpenKeyChain
         - Import your key
         - Change the password
+    - K-9 Mail
+        - Accounts
+        - Signatures
+        - Encryption: "Settings > Accounts Settings > Encryption, OpenPGP app, My Key
+    - Barcode Scanner
 7. Install PlayStore applications in this order:
     - Messenger
     - Whatsapp
