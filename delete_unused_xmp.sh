@@ -18,7 +18,7 @@ y=y
 for xmpFile in `find . -name '*.xmp'`; do
 	# remove the .xmp extension to have the image name
 	imageFile="${xmpFile%.*}"
-	if [ ! -f $imageFile ]; then
+	if [ ! -f "$imageFile" ]; then
 		if [ $ask -eq 1 ]; then
 			echo "Delete $xmpFile (y/n)?"
 			read y

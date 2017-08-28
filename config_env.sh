@@ -18,7 +18,6 @@ sudo mv 10-powerline-symbols.conf /etc/fonts/conf.d/
 
 if [ -f "$EXEC_DIR"/assets/powerline-symbols.ttf ]; then
     sudo cp "$EXEC_DIR"/assets/powerline-symbols.ttf /usr/share/fonts/
-    sudo fc-cache -vf
 else
     # patch found on https://github.com/oconnor663/powerline-fontpacher
     sudo apt install -y fontforge 
@@ -54,7 +53,7 @@ git clone https://github.com/octol/vim-cpp-enhanced-highlight.git ~/.vim/bundle/
 
 # MARDOWN Highlighting and commands
 git clone https://github.com/plasticboy/vim-markdown ~/.vim/bundle/vim-markdown
-git clone git://github.com/godlygeek/tabular.git ~/.vim/bundle/tabular
+git clone https://github.com/godlygeek/tabular.git ~/.vim/bundle/tabular
 
 # MARDOWN Preview
 sudo pip install grip
