@@ -15,6 +15,7 @@ alias sy_ges='sy doctrine:generate:entities'
 alias sy_clearp='sy cache:clear --no-warmup --env=prod'
 alias sy_cleard='sy cache:clear --no-warmup --env=dev'
 alias sy_load_fixt='sy doctrine:fixtures:load'
+alias sy_gen_assets='sy_clearp && sy_cleard && sy assetic:dump --no-debug --env=prod'
 
 # divers
 alias gdb='gdb -q'
