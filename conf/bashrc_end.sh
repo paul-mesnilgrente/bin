@@ -3,4 +3,4 @@ if [ -f /usr/local/lib/python2.7/dist-packages/powerline/bindings/bash/powerline
     source /usr/local/lib/python2.7/dist-packages/powerline/bindings/bash/powerline.sh
 fi
 
-welcome_message.sh
+$HOME/bin/welcome_message.sh
