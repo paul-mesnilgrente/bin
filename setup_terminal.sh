@@ -5,7 +5,7 @@ EXEC_DIR=`dirname "$0"`
 ######################################################
 # Install prerequisities                             #
 ######################################################
-sudo apt install -y python-pip tmux curl
+sudo apt install -y python-pip tmux curl cowsay fortune-mod lolcat
 sudo pip install --upgrade pip
 
 ######################################################
@@ -31,14 +31,14 @@ sudo fc-cache -vf
 ######################################################
 # Configure tmux                                     #
 ######################################################
-rm ~/.tmux.conf ~/.tmux.theme 2> /dev/null
+rm ~/.tmux.conf ~/.tmux.theme &> /dev/null
 ln -s "$EXEC_DIR"/conf/tmux.conf ~/.tmux.conf
 ln -s "$EXEC_DIR"/conf/tmux.theme ~/.tmux.theme
 
 ######################################################
 # Configure vim                                      #
 ######################################################
-rm ~/.vimrc 2> /dev/null
+rm ~/.vimrc &> /dev/null
 ln -s "$EXEC_DIR"/conf/vimrc ~/.vimrc
 
 # PATHOGEN
@@ -62,26 +62,22 @@ git clone https://github.com/JamshedVesuna/vim-markdown-preview ~/.vim/bundle/vi
 ######################################################
 # Configure octave                                   #
 ######################################################
-rm ~/.octaverc 2> /dev/null
+rm ~/.octaverc &> /dev/null
 ln -s "$EXEC_DIR"/conf/octaverc ~/.octaverc
+
+######################################################
+# Configure terminal_velocity                        #
+######################################################
+rm ~/.tvrc &> /dev/null
+
+sudo pip install terminal_velocity
+ln -s "$EXEC_DIR"/conf/tvrc ~/.tvrc
 
 ######################################################
 # Configure bash                                     #
 ######################################################
-rm ~/.bash_aliases ~/.gitconfig 2> /dev/null
+rm ~/.bash_aliases ~/.gitconfig &> /dev/null
 ln -s "$EXEC_DIR"/conf/bash_aliases ~/.bash_aliases
 ln -s "$EXEC_DIR"/conf/gitconfig ~/.gitconfig
 
-# POWERLINE for bash
-echo '
-# POWERLINE
-if [ -f /usr/local/lib/python2.7/dist-packages/powerline/bindings/bash/powerline.sh ]; then
-    source /usr/local/lib/python2.7/dist-packages/powerline/bindings/bash/powerline.sh
-fi' >> ~/.bashrc
-
-######################################################
-# Configure mail signatures for thunderbird          #
-######################################################
-rm ~/.pro_signature ~/.contact_signature 2> /dev/null
-ln -s "$EXEC_DIR"/conf/pro_signature ~/.pro_signature
-ln -s "$EXEC_DIR"/conf/contact_signature ~/.contact_signature
+echo "source ${EXEC_DIR}/conf/bashrc_end.sh" >> ~/.bashrc

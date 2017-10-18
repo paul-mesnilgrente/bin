@@ -1,5 +1,11 @@
 #!/bin/bash
 
+dpkg -s cowsay fortune-mod lolcat &> /dev/null
+if [ $? -ne 0 ]; then
+    echo "Please install cowsay fortune-mod and lolcat before to run $0"
+    exit 1
+fi
+
 # get files
 nb_line=`/usr/games/cowsay -l | wc -l`
 nb_line=`expr $nb_line - 1`
