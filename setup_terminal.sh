@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-EXEC_DIR=`dirname "$0"`
+EXEC_DIR=$(dirname "$0")
 
 ######################################################
 # Install prerequisities                             #
@@ -16,8 +16,8 @@ sudo pip install powerline-status
 wget https://github.com/Lokaltog/powerline/raw/develop/font/10-powerline-symbols.conf
 sudo mv 10-powerline-symbols.conf /etc/fonts/conf.d/
 
-if [ -f "$EXEC_DIR"/assets/powerline-symbols.ttf ]; then
-    sudo cp "$EXEC_DIR"/assets/powerline-symbols.ttf /usr/share/fonts/
+if [ -f ${EXEC_DIR}/assets/powerline-symbols.ttf ]; then
+    sudo cp ${EXEC_DIR}/assets/powerline-symbols.ttf /usr/share/fonts/
 else
     # patch found on https://github.com/oconnor663/powerline-fontpacher
     sudo apt install -y fontforge 
@@ -32,14 +32,14 @@ sudo fc-cache -vf
 # Configure tmux                                     #
 ######################################################
 rm ~/.tmux.conf ~/.tmux.theme &> /dev/null
-ln -s "$EXEC_DIR"/conf/tmux.conf ~/.tmux.conf
-ln -s "$EXEC_DIR"/conf/tmux.theme ~/.tmux.theme
+ln -s ${EXEC_DIR}/conf/tmux.conf ~/.tmux.conf
+ln -s ${EXEC_DIR}/conf/tmux.theme ~/.tmux.theme
 
 ######################################################
 # Configure vim                                      #
 ######################################################
 rm ~/.vimrc &> /dev/null
-ln -s "$EXEC_DIR"/conf/vimrc ~/.vimrc
+ln -s ${EXEC_DIR}/conf/vimrc ~/.vimrc
 
 # PATHOGEN
 mkdir -p ~/.vim/autoload ~/.vim/bundle
@@ -63,7 +63,7 @@ git clone https://github.com/JamshedVesuna/vim-markdown-preview ~/.vim/bundle/vi
 # Configure octave                                   #
 ######################################################
 rm ~/.octaverc &> /dev/null
-ln -s "$EXEC_DIR"/conf/octaverc ~/.octaverc
+ln -s ${EXEC_DIR}/conf/octaverc ~/.octaverc
 
 ######################################################
 # Configure terminal_velocity                        #
@@ -71,13 +71,18 @@ ln -s "$EXEC_DIR"/conf/octaverc ~/.octaverc
 rm ~/.tvrc &> /dev/null
 
 sudo pip install terminal_velocity
-ln -s "$EXEC_DIR"/conf/tvrc ~/.tvrc
+ln -s ${EXEC_DIR}/conf/tvrc ~/.tvrc
 
 ######################################################
 # Configure bash                                     #
 ######################################################
 rm ~/.bash_aliases ~/.gitconfig &> /dev/null
-ln -s "$EXEC_DIR"/conf/bash_aliases ~/.bash_aliases
-ln -s "$EXEC_DIR"/conf/gitconfig ~/.gitconfig
+ln -s ${EXEC_DIR}/conf/bash_aliases ~/.bash_aliases
+ln -s ${EXEC_DIR}/conf/gitconfig ~/.gitconfig
 
 echo "source ${EXEC_DIR}/conf/bashrc_end.sh" >> ~/.bashrc
+
+######################################################
+# Configure bash                                     #
+######################################################
+(crontab -l 2>/dev/null; echo '0 * * * * cd $HOME/bin && git pull &> /tmp/upgrade_bin.log') | crontab -u ${USER} -
