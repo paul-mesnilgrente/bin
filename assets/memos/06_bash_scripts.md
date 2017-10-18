@@ -26,3 +26,13 @@ Download playlist: `--yes-playlist` `--playlist-items 1-3,7,10-15`
 ## PDF
 
 pdftk A=contract.pdf B=signed.pdf cat A1-3 B1 output contract_signed.pdf
+
+# Redirections
+
+| Command     | Redirection                                         |
+|-------------|-----------------------------------------------------|
+| 1>filename  | Redirect stdout to file "filename."                 |
+| 1>>filename | Redirect and append stdout to file "filename."      |
+| 2>filename  | Redirect stderr to file "filename."                 |
+| 2>>filename | Redirect and append stderr to file "filename."      |
+| &>filename  | Redirect both stdout and stderr to file "filename." |
