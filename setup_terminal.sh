@@ -5,8 +5,14 @@ EXEC_DIR=$(dirname "$0")
 ######################################################
 # Install prerequisities                             #
 ######################################################
-sudo apt install -y python-pip tmux curl cowsay fortune-mod lolcat
+sudo apt install -y python-pip tmux curl
 sudo pip install --upgrade pip
+
+######################################################
+# Install some utils                                 #
+######################################################
+sudo apt install -y cowsay fortune-mod lolcat htop
+sudo pip install speedtest-cli
 
 ######################################################
 # Install powerline                                  #
