@@ -30,6 +30,7 @@ Cyan="${TC}36m";   ICyan="${TC}96m";   OnCyan="${TC}46m";   OnICyan="${TC}106m";
 White="${TC}37m";  IWhite="${TC}97m";  OnWhite="${TC}47m";  OnIWhite="${TC}107m";
 
 # examples
-# echo "${Bold}${Red}bold red on ${OnBlue}blue background,${RegB} now back to regular background, ${RegF}regular foreground and ${Reg}regular text"
-# echo "${Bold}${Undr}${Green}You can reset this whole style in one${Rst} command"
-# echo -n "${Bold}${Blue}${OnWhite}bold blue text on white background${Rst}"; sleep 3; echo "${RESET_LINE}${Red}${OnYellow}becomes red text on yellow background${Rst}"
+# echo -e "${Bold}${Red}bold red on ${OnBlue}blue background,${RegB} now back to regular background, ${RegF}regular foreground and ${Reg}regular text"
+# echo -e "${Bold}${Undr}${Green}You can reset this whole style in one${Rst} command"
+# echo -e "${Bold}${Blue}${OnWhite}bold blue text on white background${Rst}"
+# echo -e "${RESET_LINE}${Red}${OnYellow}becomes red text on yellow background${Rst}"
