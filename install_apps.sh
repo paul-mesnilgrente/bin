@@ -36,6 +36,10 @@ echo 'Mozilla firefox :
 Press enter to continue...'
 read y
 
+sudo apt-get install apt-transport-https
+wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -
+echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
+
 echo 'Sublime text :
     - installer sublime text,
     - installer le package control,
@@ -61,9 +65,9 @@ echo '
 sudo add-apt-repository -y ppa:webupd8team/java
 
 echo '
-############################
-# Ajout du ppa de owncloud #
-############################
+#############################
+# Ajout du ppa de nextcloud #
+#############################
 '
 sudo add-apt-repository -y ppa:nextcloud-devs/client
 echo '
@@ -101,7 +105,7 @@ grisbi \
 gparted \
 libreoffice-java-common \
 oracle-java8-installer \
-git \
+git sublime-text \
 nextcloud-client nextcloud-client-nautilus \
 curl libgnome2-bin \
 darktable python-pygments"
@@ -131,26 +135,7 @@ echo "Lanceur :
 Press enter to continue..."
 read y
 
-echo "Clefs SSH :
-    - Enter the path to the folder that contains your keys:"
-read pathToSSHKeys
-mkdir ~/.ssh
-cp "$pathToSSHKeys"/id_rsa* ~/.ssh
-chmod 700 ~/.ssh
-chmod 600 ~/.ssh/*
-ssh-add
-
 rm -rf examples.desktop Modèles Public
-echo '
-# function to set terminal title
-function set-title(){
-  if [[ -z "$ORIG" ]]; then
-    ORIG=$PS1
-  fi
-  TITLE="\[\e]2;$*\a\]"
-  PS1=${ORIG}${TITLE}
-}
-' >> ~/.bashrc
 
 # Configuration of sublime text
 echo '{
@@ -158,11 +143,6 @@ echo '{
     "word_wrap": false,
 }' > "$HOME/.config/sublime-text-3/Packages/User/Preferences.sublime-settings"
 
-# Tip for dropbox
-echo "fs.inotify.max_user_watches = 524288" | sudo tee -a /etc/sysctl.conf
-sudo sysctl -p
-
-echo '
 ####################################################
 # Installation de la suite apache, symfony etc.    #
 ####################################################
