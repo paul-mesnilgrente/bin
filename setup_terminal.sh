@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 EXEC_DIR=$(dirname "$0")
 
 ######################################################
@@ -37,14 +39,15 @@ sudo fc-cache -vf
 ######################################################
 # Configure tmux                                     #
 ######################################################
-rm ~/.tmux.conf ~/.tmux.theme &> /dev/null
+[ -f ~/.tmux.conf ] && rm ~/.tmux.conf
+[ -f ~/.tmux.theme ] && rm ~/.tmux.theme
 ln -s ${EXEC_DIR}/conf/tmux.conf ~/.tmux.conf
 ln -s ${EXEC_DIR}/conf/tmux.theme ~/.tmux.theme
 
 ######################################################
 # Configure vim                                      #
 ######################################################
-rm ~/.vimrc &> /dev/null
+[-f ~/.vimrc ] && rm ~/.vimrc
 ln -s ${EXEC_DIR}/conf/vimrc ~/.vimrc
 
 # PATHOGEN
@@ -68,13 +71,13 @@ git clone https://github.com/JamshedVesuna/vim-markdown-preview ~/.vim/bundle/vi
 ######################################################
 # Configure octave                                   #
 ######################################################
-rm ~/.octaverc &> /dev/null
+[ -f ~/.octaverc ] && rm ~/.octaverc
 ln -s ${EXEC_DIR}/conf/octaverc ~/.octaverc
 
 ######################################################
 # Configure terminal_velocity                        #
 ######################################################
-rm ~/.tvrc &> /dev/null
+[ -f ~/.tvrc ] && rm ~/.tvrc
 
 sudo pip install terminal_velocity
 ln -s ${EXEC_DIR}/conf/tvrc ~/.tvrc
@@ -82,13 +85,9 @@ ln -s ${EXEC_DIR}/conf/tvrc ~/.tvrc
 ######################################################
 # Configure bash                                     #
 ######################################################
-rm ~/.bash_aliases ~/.gitconfig &> /dev/null
+[ -f ~/.bash_aliases ] && rm ~/.bash_aliases
+[ -f ~/.gitconfig ] && rm ~/.gitconfig
 ln -s ${EXEC_DIR}/conf/bash_aliases ~/.bash_aliases
 ln -s ${EXEC_DIR}/conf/gitconfig ~/.gitconfig
 
 echo "source ${EXEC_DIR}/conf/bashrc_end.sh" >> ~/.bashrc
-
-######################################################
-# Configure bash                                     #
-######################################################
-(crontab -l 2>/dev/null; echo '0 * * * * cd $HOME/bin && git pull &> /tmp/upgrade_bin.log') | crontab -u ${USER} -
