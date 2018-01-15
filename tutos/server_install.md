@@ -681,6 +681,7 @@ sudo apt install -y default-jdk
 sudo dpkg -i subsonic-6.0.deb
 sudo vim /etc/apache2/sites-available/subsonic.conf
 sudo a2ensite subsonic.conf
+sudo certbot --apache -d subsonic.paul-mesnilgrente.com
 sudo service apache2 restart
 
 # création de l'utilisateur subsonic
