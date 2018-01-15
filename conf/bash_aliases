@@ -25,6 +25,10 @@ alias taille='du -hs'
 alias ccat='pygmentize -g'
 alias ppath='echo $PATH | tr ":" "\n"'
 alias pip_upgrade='sudo pip list --outdated --format=freeze 2> /dev/null | cut -d= -f1 | xargs sudo pip install -U'
+alias my_alert='notify-send --urgency=low \
+                            -i "$([ $? = 0 ] && echo terminal || echo error)" \
+                            "$(history|tail -n2|head -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"; \
+                paplay /usr/share/sounds/ubuntu/notifications/Mallet.ogg'
 
 # server
 alias occ='sudo -u www-data php /var/www/nextcloud/occ'
