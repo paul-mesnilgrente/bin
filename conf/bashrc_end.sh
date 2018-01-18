@@ -3,5 +3,6 @@ if [ -f /usr/local/lib/python2.7/dist-packages/powerline/bindings/bash/powerline
     source /usr/local/lib/python2.7/dist-packages/powerline/bindings/bash/powerline.sh
 fi
 
-source $HOME/bin/tab_title.sh
-$HOME/bin/welcome_message.sh
+source "${HOME}"/bin/tab_title.sh
+source "${HOME}"/bin/custom_output.sh
+"${HOME}"/bin/welcome_message.sh
