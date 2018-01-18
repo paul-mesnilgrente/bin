@@ -2,8 +2,6 @@
 
 set -e
 
-EXEC_DIR=$(dirname "$0")
-
 ######################################################
 # Install prerequisities                             #
 ######################################################
@@ -24,8 +22,8 @@ sudo pip install powerline-status
 wget https://github.com/Lokaltog/powerline/raw/develop/font/10-powerline-symbols.conf
 sudo mv 10-powerline-symbols.conf /etc/fonts/conf.d/
 
-if [ -f ${EXEC_DIR}/assets/powerline-symbols.ttf ]; then
-    sudo cp ${EXEC_DIR}/assets/powerline-symbols.ttf /usr/share/fonts/
+if [ -f ~/bin/assets/powerline-symbols.ttf ]; then
+    sudo cp ~/bin/assets/powerline-symbols.ttf /usr/share/fonts/
 else
     # patch found on https://github.com/oconnor663/powerline-fontpacher
     sudo apt install -y fontforge 
@@ -39,16 +37,16 @@ sudo fc-cache -vf
 ######################################################
 # Configure tmux                                     #
 ######################################################
-[ -f ~/.tmux.conf ] && rm ~/.tmux.conf
-[ -f ~/.tmux.theme ] && rm ~/.tmux.theme
-ln -s ${EXEC_DIR}/conf/tmux.conf ~/.tmux.conf
-ln -s ${EXEC_DIR}/conf/tmux.theme ~/.tmux.theme
+[ -f ~/.tmux.conf -o -h ~/.tmux.conf ] && rm ~/.tmux.conf
+[ -f ~/.tmux.theme -o -h ~/.tmux.theme ] && rm ~/.tmux.theme
+ln -s ~/bin/conf/tmux.conf ~/.tmux.conf
+ln -s ~/bin/conf/tmux.theme ~/.tmux.theme
 
 ######################################################
 # Configure vim                                      #
 ######################################################
-[-f ~/.vimrc ] && rm ~/.vimrc
-ln -s ${EXEC_DIR}/conf/vimrc ~/.vimrc
+[ -f ~/.vimrc -o -h ~/.vimrc ] && rm ~/.vimrc
+ln -s ~/bin/conf/vimrc ~/.vimrc
 
 # PATHOGEN
 mkdir -p ~/.vim/autoload ~/.vim/bundle
@@ -71,23 +69,23 @@ git clone https://github.com/JamshedVesuna/vim-markdown-preview ~/.vim/bundle/vi
 ######################################################
 # Configure octave                                   #
 ######################################################
-[ -f ~/.octaverc ] && rm ~/.octaverc
-ln -s ${EXEC_DIR}/conf/octaverc ~/.octaverc
+[ -f ~/.octaverc -o -h ~/.octaverc ] && rm ~/.octaverc
+ln -s ~/bin/conf/octaverc ~/.octaverc
 
 ######################################################
 # Configure terminal_velocity                        #
 ######################################################
-[ -f ~/.tvrc ] && rm ~/.tvrc
+[ -f ~/.tvrc -o -h ~/.tvrc ] && rm ~/.tvrc
 
 sudo pip install terminal_velocity
-ln -s ${EXEC_DIR}/conf/tvrc ~/.tvrc
+ln -s ~/bin/conf/tvrc ~/.tvrc
 
 ######################################################
 # Configure bash                                     #
 ######################################################
-[ -f ~/.bash_aliases ] && rm ~/.bash_aliases
-[ -f ~/.gitconfig ] && rm ~/.gitconfig
-ln -s ${EXEC_DIR}/conf/bash_aliases ~/.bash_aliases
-ln -s ${EXEC_DIR}/conf/gitconfig ~/.gitconfig
+[ -f ~/.bash_aliases -o -h ~/.bash_aliases ] && rm ~/.bash_aliases
+[ -f ~/.gitconfig -o -h ~/.gitconfig ] && rm ~/.gitconfig
+ln -s ~/bin/conf/bash_aliases ~/.bash_aliases
+ln -s ~/bin/conf/gitconfig ~/.gitconfig
 
-echo "source ${EXEC_DIR}/conf/bashrc_end.sh" >> ~/.bashrc
+echo "source ~/bin/conf/bashrc_end.sh" >> ~/.bashrc
