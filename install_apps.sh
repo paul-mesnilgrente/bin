@@ -25,6 +25,9 @@ sudo add-apt-repository -y ppa:nextcloud-devs/client
 presult.sh -s 'Adding darktable ppa'
 sudo add-apt-repository -y ppa:pmjdebruijn/darktable-release
 
+presult.sh -s 'Adding Telegram ppa'
+sudo add-apt-repository -y ppa:atareao/telegram
+
 presult.sh -s 'Adding NodeJS ppa'
 curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 
@@ -39,16 +42,35 @@ sudo apt install -y nautilus-dropbox \
     libreoffice-java-common \
     git sublime-text nextcloud-client \
     nextcloud-client-nautilus curl libgnome2-bin \
-    darktable python-pygments \
+    darktable python-pygments telegram \
     php mysql-server php-mysql php-xml php-intl nodejs
 
 presult.sh -s 'Installing composer'
 install_composer.sh
 
-presult.sh -s "Installing NPM"
+presult.sh -s 'Installing NPM'
 sudo npm install npm -g
 sudo chown -R $USER:$(id -gn $USER) $HOME/.config
 sudo npm install less -g
+
+presult.sh -s 'Installing Messenger'
+wget 'https://updates.messengerfordesktop.com/download/linux/latest/beta?arch=amd64&pkg=deb' \
+ -O messenger.deb
+sudo apt install -y ./messenger.deb
+rm messenger.deb
+
+presult.sh -s 'Installing Whatsapp'
+presult.sh -f 'Nothing working without installing google chrome'
+
+presult.sh -s 'Installing Skype'
+wget 'https://go.skype.com/skypeforlinux-64.deb'
+sudo apt install -y ./skypeforlinux-64.deb
+rm skypeforlinux-64.deb
+
+presult.sh -s 'Installing Slack'
+wget 'https://downloads.slack-edge.com/linux_releases/slack-desktop-3.0.5-amd64.deb'
+sudo apt install -y ./slack-desktop-3.0.5-amd64.deb
+rm slack-desktop-3.0.5-amd64.deb
 
 require_action 'System :
     - Install languages
