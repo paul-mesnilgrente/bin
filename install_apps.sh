@@ -64,18 +64,20 @@ require_action 'Mozilla thunderbird :
     - Install extensions :
         - Lightning, 
         - Enigmail,
-        - Address book.'
+        - CardBook.'
 
 require_action 'Mozilla firefox :
-    - Go on https://startpage.com/ and set it up,
-    - Add starpage as default search engine,
-    - Remove other search engines,
     - Install lastpass,
     - Remove bookmarks,
     - Synchro firefox,
+    - Go on https://startpage.com/ and set it up,
+    - Add starpage as default search engine,
+    - Remove other search engines,
     - Configure wallabag,
     - Add the bookmark toolbar,
-    - Enable "use autoscrolling".'
+    - Enable "use autoscrolling",
+    - Add the search bar,
+    - Configure vertical bar.'
 
 require_action 'Sublime text :
     - Install the package control (one click in sublime),
@@ -83,9 +85,12 @@ require_action 'Sublime text :
 
 require_action 'Install language tools.'
 
+require_action 'Launch and configure Nextcloud.'
+
 [ -f examples.desktop ] && rm -rf examples.desktop
 [ -d Templates ] && rm -rf Templates
 [ -d Public ] && rm -rf Public
+[ ! -f ~/.hidden ] && echo bin >> ~/.hidden
 [ `grep -c '^bin$' ~/.hidden` -eq 0 ] && echo bin >> ~/.hidden
 
 require_action "End of the script."
