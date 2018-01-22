@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 
+import argparse
 import logging
 import sys
 
 # Custom formatter
 class my_formatter(logging.Formatter):
-    debug_format  = "DEBUG: %(msg)s"
-    info_format = "INFO: %(msg)s"
-    warn_format = "WARN: %(msg)s"
-    error_format  = "ERROR: %(msg)s"
-    critical_format  = "CRITICAL: %(msg)s"
+    debug_format  = "\033[1m\033[34m%(msg)s\033[0m"
+    info_format = "\033[1m\033[32m%(msg)s\033[0m"
+    warn_format = "\033[1m\033[35m%(msg)s\033[0m"
+    error_format  = "\033[1m\033[31m%(msg)s\033[0m"
+    critical_format  = "\033[1m\033[107m\033[31m%(msg)s\033[0m"
 
     def __init__(self):
         super().__init__(fmt="%(levelno)d: %(msg)s", datefmt=None, style='%')  
@@ -40,15 +41,41 @@ class my_formatter(logging.Formatter):
 
         return result
 
-if __name__ == '__main__':
+def get_args():
+    parser = argparse.ArgumentParser(description='Log with colors in a console')
+    parser.add_argument('-l', '--level',
+        nargs='?',
+        type=str,
+        choices=['DEBUG', 'INFO', 'WARN', 'ERROR', 'CRITICAL'],
+        default='INFO',
+        help='5 different levels available: DEBUG, INFO, WARN, ERROR, CRITICAL')
+    parser.add_argument('log',
+        nargs='+',
+        type=str,
+        help='Logs to print, a line return is done after each argument')
+    return parser.parse_args()
+
+def configure_logs():
     ch = logging.StreamHandler()
     ch.setFormatter(my_formatter())
 
     logging.root.addHandler(ch)
     logging.root.setLevel(logging.DEBUG)
 
-    logging.debug('debug message')
-    logging.info('info message')
-    logging.warn('warning message')
-    logging.error('error message')
-    logging.critical('critical message')
+def log(args):
+    logs = '\n'.join(args.log)
+    if args.level == 'DEBUG':
+        logging.debug(logs)
+    elif args.level == 'INFO':
+        logging.info(logs)
+    elif args.level == 'WARN':
+        logging.warn(logs)
+    elif args.level == 'ERROR':
+        logging.error(logs)
+    elif args.level == 'CRITICAL':
+        logging.critical(logs)
+
+if __name__ == '__main__':
+    args = get_args()
+    configure_logs()
+    log(args)

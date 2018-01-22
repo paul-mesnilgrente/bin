@@ -5,8 +5,9 @@ set -e
 ######################################################
 # Install prerequisities                             #
 ######################################################
-sudo apt install -y python-pip tmux curl
+sudo apt install -y python3 python3-pip python python-pip tmux curl
 sudo pip install --upgrade pip
+sudo pip3 install --upgrade pip
 
 ######################################################
 # Install some utils                                 #
