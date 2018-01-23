@@ -3,6 +3,7 @@
 import argparse
 import logging
 import sys
+import shutil
 
 # Custom formatter
 class my_formatter(logging.Formatter):
@@ -43,6 +44,9 @@ class my_formatter(logging.Formatter):
 
 def get_args():
     parser = argparse.ArgumentParser(description='Log with colors in a console')
+    parser.add_argument('-b', '--big',
+        action='store_true',
+        help='if specified, surround the message by hashes')
     parser.add_argument('-l', '--level',
         nargs='?',
         type=str,
@@ -62,8 +66,18 @@ def configure_logs():
     logging.root.addHandler(ch)
     logging.root.setLevel(logging.DEBUG)
 
-def log(args):
-    logs = '\n'.join(args.log)
+def get_log(args):
+    if not args.big:
+        return '\n'.join(args.log)
+    width = len(max(args.log, key=len)) + 4
+    lines = [ '#' * width ]
+    logs = [ '# {}{} #'.format(s, ' ' * (width - len(s) - 4)) for s in args.log ]
+    lines += logs
+    lines.append('#' * width)
+    
+    return '\n'.join(lines)
+
+def print_log(logs, args):
     if args.level == 'DEBUG':
         logging.debug(logs)
     elif args.level == 'INFO':
@@ -78,4 +92,5 @@ def log(args):
 if __name__ == '__main__':
     args = get_args()
     configure_logs()
-    log(args)
+    log = get_log(args)
+    print_log(log, args)
