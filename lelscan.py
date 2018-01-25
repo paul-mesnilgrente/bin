@@ -34,30 +34,37 @@ def get_urls(args):
         os.makedirs(folder)
     base_url = 'http://lelscanz.com/mangas/'
     base_url += '{}/{}/'.format(name, episode)
-    for i in range(1, args.number_of_pages[0] + 1):
-        url = '{}{}.jpg'.format(base_url, i)
+    for i in range(args.number_of_pages[0] + 1):
+        url_n = '{}{}.jpg'.format(base_url, i)
+        url_a = '{}{:02}.jpg'.format(base_url, i)
         filename = '{}/{:03d}.jpg'.format(folder, i)
-        res.append((url, filename))
+        res.append((url_n, url_a, filename))
     return res
 
-
-def download_episode(urls):
+def save_episode(response, filename):
+    with open(filename, 'wb') as f:
+        response.raw.decode_content = True
+        shutil.copyfileobj(response.raw, f)
+    
+def download_episodes(urls):
     """
     urlretrieve does not work because lelscanz.com does not accept it
     it answers a 403 forbidden
     """
-    for url, filename in urls:
+    for url, url_a, filename in urls:
         print('{} -> {}'.format(url, filename))
         r = requests.get(url, stream=True)
         if r.status_code == 200:
-            with open(filename, 'wb') as f:
-                r.raw.decode_content = True
-                shutil.copyfileobj(r.raw, f)
+            save_episode(r, filename)
         else:
-            print('ERROR: request returned {}'.format(r.status_code))
+            r = requests.get(url_a, stream=True)
+            if r.status_code == 200:
+                save_episode(r, filename)
+            else:
+                print('ERROR: request returned {}'.format(r.status_code))
 
 if __name__ == '__main__':
     args = get_args()
     print(args)
     urls = get_urls(args)
-    download_episode(urls)
+    download_episodes(urls)
