@@ -1,70 +1,79 @@
 #!/usr/bin/env python3
 
+from pyquery import PyQuery as pq
+from lxml import etree
+from urllib.parse import urlparse
+from pathlib import Path
+import os
 import requests
 import shutil
-import os
 import argparse
 
 def get_args():
-    parser = argparse.ArgumentParser(description='Log with colors in a console')
-    parser.add_argument('-m', '--manga',
-        nargs=1,
+    parser = argparse.ArgumentParser(description='Download pictures from a scan on lelscan')
+    parser.add_argument('-u', '--url',
         type=str,
-        help='the manga to download the episode from')
-    parser.add_argument('-e', '--episode',
-        nargs=1,
-        type=int,
-        help='The episode to download')
-    parser.add_argument('-n', '--number-of-pages',
-        nargs=1,
-        type=int,
-        help='The number of pages there is in the episode')
+        help='the url of the scan')
     parser.add_argument('-f', '--folder',
-        nargs='?',
         type=str,
-        help='The folder where to put the pages')
+        default='tmp',
+        help='the folder where to store the images')
     return parser.parse_args()
 
-def get_urls(args):
-    res = []
-    name = args.manga[0].replace(' ', '-').lower()
-    episode = args.episode[0]
-    folder = '{}_-_{:03d}'.format(name, episode) if (args.folder == None) else args.folder
-    if not os.path.exists(folder):
-        os.makedirs(folder)
-    base_url = 'http://lelscanz.com/mangas/'
-    base_url += '{}/{}/'.format(name, episode)
-    for i in range(args.number_of_pages[0] + 1):
-        url_n = '{}{}.jpg'.format(base_url, i)
-        url_a = '{}{:02}.jpg'.format(base_url, i)
-        filename = '{}/{:03d}.jpg'.format(folder, i)
-        res.append((url_n, url_a, filename))
-    return res
+def check_folder(folder):
+    p = Path(folder)
+    if p.exists():
+        p = 'The folder {} already exists,'.format(folder)
+        p += ' do you want to delete its content (y/n)? '
+        i = input(p)
+        if i == 'y':
+            shutil.rmtree(folder)
+        else:
+            return False
+    os.mkdir(folder)
+    return True
+def get_base_url(url):
+    o = urlparse(url)
+    return '{}://{}'.format(o[0], o[1])
 
-def save_episode(response, filename):
+def get_pages(url):
+    d = pq(url=url)
+    pages = [link.attr('href') for link in d.items('#navigation a')]
+    pages.pop(0)
+    pages.pop(len(pages) - 1)
+    return pages
+
+def get_images(base_url, pages):
+    print('Download pages')
+    images = []
+    for page in pages:
+        print('    {}'.format(page))
+        d = pq(url=page)
+        images.append(base_url + d('#image img').attr('src'))
+    return images
+
+def save_image(folder, i, response):
+    filename = '{}/{:03d}.jpg'.format(folder, i)
     with open(filename, 'wb') as f:
         response.raw.decode_content = True
         shutil.copyfileobj(response.raw, f)
     
-def download_episodes(urls):
-    """
-    urlretrieve does not work because lelscanz.com does not accept it
-    it answers a 403 forbidden
-    """
-    for url, url_a, filename in urls:
-        print('{} -> {}'.format(url, filename))
-        r = requests.get(url, stream=True)
-        if r.status_code == 200:
-            save_episode(r, filename)
-        else:
-            r = requests.get(url_a, stream=True)
-            if r.status_code == 200:
-                save_episode(r, filename)
-            else:
-                print('ERROR: request returned {}'.format(r.status_code))
+def download_images(folder, images):
+    print('Downloading images')
+    for i, image in enumerate(images):
+        print('    {}'.format(image))
+        r = requests.get(image, stream=True)
+        if r.status_code != 200:
+            print('ERROR: downloading image {}.'.format(image))
+            continue
+        save_image(folder, i, r)
 
 if __name__ == '__main__':
     args = get_args()
-    print(args)
-    urls = get_urls(args)
-    download_episodes(urls)
+    url = args.url
+    folder = args.folder
+    print(url, folder)
+    if check_folder(folder):
+        pages = get_pages(url)
+        images = get_images(get_base_url(url), pages)
+        download_images(folder, images)
