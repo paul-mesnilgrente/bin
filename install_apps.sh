@@ -53,6 +53,10 @@ sudo apt install -y nautilus-dropbox \
 log.py 'Installing composer'
 install_composer.sh
 
+log.py 'Installing symfony'
+sudo curl -LsS https://symfony.com/installer -o /usr/local/bin/symfony
+sudo chmod a+x /usr/local/bin/symfony
+
 log.py 'Installing NPM'
 sudo npm install npm -g
 sudo chown -R $USER:$(id -gn $USER) $HOME/.config
