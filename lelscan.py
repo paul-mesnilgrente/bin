@@ -49,7 +49,11 @@ def get_images(base_url, pages):
     for page in pages:
         print('    {}'.format(page))
         d = pq(url=page)
-        images.append(base_url + d('#image img').attr('src'))
+        src = d('#image img').attr('src')
+        if src[0] == '/':
+            images.append(base_url + src)
+        else:
+            images.append(src)
     return images
 
 def save_image(folder, i, response):
