@@ -20,7 +20,7 @@ alias sy_gen_assets='sy_clearp && sy_cleard && sy assetic:dump --no-debug --env=
 # divers
 alias gdb='gdb -q'
 alias octave-cli='octave-cli -q'
-alias go='gnome-open'
+alias go='xdg-open'
 alias taille='du -hs'
 alias ccat='pygmentize -g'
 alias ppath='echo $PATH | tr ":" "\n"'
