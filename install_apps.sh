@@ -11,7 +11,7 @@ function require_action {
 sudo apt install -y python python-pip python3 python3-pip
 
 log.py -l ERROR 'Removing useless packages'
-sudo apt autoremove --purge -y unity-webapps-common totem shotwell shotwell-common
+sudo apt autoremove --purge -y ubuntu-web-launchers totem shotwell
 
 log.py 'Adding sublime text ppa'
 sudo apt install -y apt-transport-https
@@ -27,9 +27,6 @@ sudo add-apt-repository -y ppa:nextcloud-devs/client
 log.py 'Adding darktable ppa'
 sudo add-apt-repository -y ppa:pmjdebruijn/darktable-release
 
-log.py 'Adding Telegram ppa'
-sudo add-apt-repository -y ppa:atareao/telegram
-
 log.py 'Adding LibreOffice ppa'
 sudo add-apt-repository -y ppa:libreoffice/ppa
 
@@ -41,14 +38,12 @@ sudo apt update && sudo apt -y upgrade
 
 log.py 'Install basic softwares and libraries'
     # oracle-java8-installer \
-sudo apt install -y nautilus-dropbox \
-    easytag vim tree ttf-mscorefonts-installer \
-    vlc gimp xournal gnome-chess grisbi gparted \
-    libreoffice-java-common \
-    git sublime-text nextcloud-client \
-    nextcloud-client-nautilus curl libgnome2-bin \
-    darktable python-pygments telegram \
-    php mysql-server php-mysql php-xml php-intl nodejs
+sudo apt install -y \
+    easytag ttf-mscorefonts-installer \
+    vlc gimp gnome-chess grisbi gparted \
+    sublime-text nextcloud-client libgnome2-bin \
+    nextcloud-client-nautilus darktable nodejs \
+    php mysql-server php-mysql php-xml php-intl
 
 log.py 'Installing composer'
 install_composer.sh
@@ -57,10 +52,13 @@ log.py 'Installing symfony'
 sudo curl -LsS https://symfony.com/installer -o /usr/local/bin/symfony
 sudo chmod a+x /usr/local/bin/symfony
 
-log.py 'Installing NPM'
+log.py 'Updating NPM'
 sudo npm install npm -g
 sudo chown -R $USER:$(id -gn $USER) $HOME/.config
 sudo npm install less -g
+
+log.py 'Installing Telegram'
+snap install telegram-desktop
 
 log.py 'Installing Messenger'
 wget 'https://updates.messengerfordesktop.com/download/linux/latest/beta?arch=amd64&pkg=deb' \
@@ -78,7 +76,7 @@ rm skypeforlinux-64.deb
 
 log.py 'Installing Slack'
 wget 'https://downloads.slack-edge.com/linux_releases/slack-desktop-3.0.5-amd64.deb'
-sudo apt install -y ./slack-desktop-3.0.5-amd64.deb
+sudo dpkg --force-all -i ./slack-desktop-3.0.5-amd64.deb
 rm slack-desktop-3.0.5-amd64.deb
 
 require_action 'System :

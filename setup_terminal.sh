@@ -12,7 +12,7 @@ sudo pip3 install --upgrade pip
 ######################################################
 # Install some utils                                 #
 ######################################################
-sudo apt install -y cowsay fortune-mod lolcat htop
+sudo apt install -y cowsay fortune-mod lolcat htop tree
 sudo pip install speedtest-cli
 
 ######################################################
