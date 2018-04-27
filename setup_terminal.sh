@@ -67,6 +67,10 @@ git clone https://github.com/godlygeek/tabular.git ~/.vim/bundle/tabular
 sudo pip install grip
 git clone https://github.com/JamshedVesuna/vim-markdown-preview ~/.vim/bundle/vim-markdown-preview
 
+# SYNTASTIC
+sudo pip install flake8
+git clone --depth=1 https://github.com/vim-syntastic/syntastic ~/.vim/bundle/syntastic
+
 ######################################################
 # Configure octave                                   #
 ######################################################
