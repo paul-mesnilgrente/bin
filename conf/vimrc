@@ -20,7 +20,7 @@ set autowrite      " save when you change of window or tab
 au FocusLost * :wa " save when focus is lost
 
 " POWERLINE
-set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim/
+set rtp+=/usr/local/lib/python3.6/dist-packages/powerline/bindings/vim/
 set laststatus=2
 set t_Co=256
 
