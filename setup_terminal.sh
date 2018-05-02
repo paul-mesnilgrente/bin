@@ -2,11 +2,12 @@
 
 set -e
 
-sudo apt install -y tmux vim git
+sudo apt install -y tmux vim git python3-pip
+sudo pip install powerline-status
 ######################################################
 # Install pyenv                                      #
 ######################################################
-sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
+sudo apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
 libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
 xz-utils tk-dev
 curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
@@ -20,7 +21,7 @@ pyenv install 3.6.5
 pyenv install 2.7.15rc1
 pyenv virtualenv 3.6.5 tools3
 pyenv virtualenv 2.7.15rc1 tools2
-pyenv activate 3.6.5
+pyenv activate tools3
 
 ######################################################
 # Install some utils                                 #
@@ -31,8 +32,6 @@ pip install speedtest-cli
 ######################################################
 # Install powerline                                  #
 ######################################################
-pip install powerline-status
-
 wget https://github.com/Lokaltog/powerline/raw/develop/font/10-powerline-symbols.conf
 sudo mv 10-powerline-symbols.conf /etc/fonts/conf.d/
 
