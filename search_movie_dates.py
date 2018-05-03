@@ -7,11 +7,12 @@ import os
 import time
 import http.client
 import json
-from pprint import pprint
 from urllib.parse import quote
 
+
 # Print iterations progress
-def progress_bar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█'):
+def progress_bar(iteration, total, prefix='', suffix='', decimals=1,
+                 length=100, fill='█'):
     """
     Call in a loop to create terminal progress bar
     @params:
@@ -19,21 +20,24 @@ def progress_bar(iteration, total, prefix='', suffix='', decimals=1, length=100,
     total       - Required  : total iterations (Int)
     prefix      - Optional  : prefix string (Str)
     suffix      - Optional  : suffix string (Str)
-    decimals    - Optional  : positive number of decimals in percent complete (Int)
+    decimals    - Optional  : positive number of decimals in percent (Int)
     length      - Optional  : character length of bar (Int)
     fill        - Optional  : bar fill character (Str)
     """
-    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
+    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration /
+                                                     float(total)))
     filledLength = int(length * iteration // total)
     bar = fill * filledLength + '-' * (length - filledLength)
-    print('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix), end = '\r')
+    print('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix), end='\r')
     # Print New Line on Complete
-    if iteration == total: 
+    if iteration == total:
         print()
+
 
 def get_movie_list_by_file(path2file):
     file = open(path2file)
     return file.read().splitlines()
+
 
 def get_movie_list_by_path(path):
     dirs = os.listdir()
@@ -43,9 +47,11 @@ def get_movie_list_by_path(path):
             res.append(folder)
     return res
 
+
 def init_connection():
     conn = http.client.HTTPSConnection("api.themoviedb.org")
     return conn
+
 
 def get_json_data(conn, url):
     payload = "{}"
@@ -57,10 +63,12 @@ def get_json_data(conn, url):
         return json.loads("{}")
     return json.loads(data)
 
+
 def get_token(conn, api_key):
     url = "/3/authentication/token/new"
     url += "?api_key=" + api_key
-    json_data = get_json_data(conn, url)
+    return get_json_data(conn, url)
+
 
 def construct_movie_search_url(api_key, movie):
     url = "/3/search/movie?"
@@ -70,6 +78,7 @@ def construct_movie_search_url(api_key, movie):
     url += "&page=1&query=" + movie
     url = quote(url, safe="%/:=&?~#+!$,;'@()*[]")
     return url
+
 
 def search_movie(conn, api_key, movie):
     """
@@ -85,6 +94,7 @@ def search_movie(conn, api_key, movie):
     for id, result in enumerate(json_data["results"]):
         res[id] = result
     return res
+
 
 def choose_date(movie, results):
     """
@@ -107,13 +117,15 @@ def choose_date(movie, results):
         return None
     return results[int(answer)]["release_date"].split("-")[0]
 
+
 def rename_file(filename, date):
-    if date == None:
+    if date is None:
         new_filename = filename
     else:
         new_filename = filename + "_(" + date + ")"
     print("    ------>", new_filename)
     os.rename(filename, new_filename)
+
 
 if __name__ == '__main__':
     api_key = "aa898267ad6c91cf89ae0c2afaf167c2"
@@ -123,11 +135,11 @@ if __name__ == '__main__':
         lines = get_movie_list_by_file(sys.argv[1])
     else:
         lines = get_movie_list_by_path('.')
-    l = len(lines)
+    nb_line = len(lines)
     movies = {}
-    progress_bar(0, l, prefix = 'Searching:', length = 50)
+    progress_bar(0, nb_line, prefix='Searching:', length=50)
     for num, line in enumerate(lines):
-        progress_bar(num + 1, l, prefix = 'Searching:', length = 50)
+        progress_bar(num + 1, nb_line, prefix='Searching:', length=50)
         movie = splitext(line.rstrip())[0].replace("_", " ")
         movies[line] = search_movie(conn, api_key, movie)
 

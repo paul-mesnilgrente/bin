@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from pyquery import PyQuery as pq
-from lxml import etree
 from urllib.parse import urlparse
 from pathlib import Path
 import os
@@ -9,16 +8,19 @@ import requests
 import shutil
 import argparse
 
+
 def get_args():
-    parser = argparse.ArgumentParser(description='Download pictures from a scan on lelscan')
+    parser = argparse.ArgumentParser(description='Download pictures from a \
+                                     scan on lelscan')
     parser.add_argument('-u', '--url',
-        type=str,
-        help='the url of the scan')
+                        type=str,
+                        help='the url of the scan')
     parser.add_argument('-f', '--folder',
-        type=str,
-        default='tmp',
-        help='the folder where to store the images')
+                        type=str,
+                        default='tmp',
+                        help='the folder where to store the images')
     return parser.parse_args()
+
 
 def check_folder(folder):
     p = Path(folder)
@@ -32,9 +34,12 @@ def check_folder(folder):
             return False
     os.mkdir(folder)
     return True
+
+
 def get_base_url(url):
     o = urlparse(url)
     return '{}://{}'.format(o[0], o[1])
+
 
 def get_pages(url):
     d = pq(url=url)
@@ -42,6 +47,7 @@ def get_pages(url):
     pages.pop(0)
     pages.pop(len(pages) - 1)
     return pages
+
 
 def get_images(base_url, pages):
     print('Download pages')
@@ -56,12 +62,14 @@ def get_images(base_url, pages):
             images.append(src)
     return images
 
+
 def save_image(folder, i, response):
     filename = '{}/{:03d}.jpg'.format(folder, i)
     with open(filename, 'wb') as f:
         response.raw.decode_content = True
         shutil.copyfileobj(response.raw, f)
-    
+
+
 def download_images(folder, images):
     print('Downloading images')
     for i, image in enumerate(images):
@@ -71,6 +79,7 @@ def download_images(folder, images):
             print('ERROR: downloading image {}.'.format(image))
             continue
         save_image(folder, i, r)
+
 
 if __name__ == '__main__':
     args = get_args()

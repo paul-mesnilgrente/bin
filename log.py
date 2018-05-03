@@ -2,19 +2,17 @@
 
 import argparse
 import logging
-import sys
-import shutil
 
-# Custom formatter
+
 class my_formatter(logging.Formatter):
-    debug_format  = "\033[1m\033[34m%(msg)s\033[0m"
+    debug_format = "\033[1m\033[34m%(msg)s\033[0m"
     info_format = "\033[1m\033[32m%(msg)s\033[0m"
     warn_format = "\033[1m\033[35m%(msg)s\033[0m"
-    error_format  = "\033[1m\033[31m%(msg)s\033[0m"
-    critical_format  = "\033[1m\033[107m\033[31m%(msg)s\033[0m"
+    error_format = "\033[1m\033[31m%(msg)s\033[0m"
+    critical_format = "\033[1m\033[107m\033[31m%(msg)s\033[0m"
 
     def __init__(self):
-        super().__init__(fmt="%(levelno)d: %(msg)s", datefmt=None, style='%')  
+        super().__init__(fmt="%(levelno)d: %(msg)s", datefmt=None, style='%')
 
     def format(self, record):
 
@@ -42,22 +40,26 @@ class my_formatter(logging.Formatter):
 
         return result
 
+
 def get_args():
-    parser = argparse.ArgumentParser(description='Log with colors in a console')
+    parser = argparse.ArgumentParser(description='Log with colors in console')
     parser.add_argument('-b', '--big',
-        action='store_true',
-        help='if specified, surround the message by hashes')
+                        action='store_true',
+                        help='if specified, surround the message by hashes')
     parser.add_argument('-l', '--level',
-        nargs='?',
-        type=str,
-        choices=['DEBUG', 'INFO', 'WARN', 'ERROR', 'CRITICAL'],
-        default='INFO',
-        help='5 different levels available: DEBUG, INFO, WARN, ERROR, CRITICAL')
+                        nargs='?',
+                        type=str,
+                        choices=['DEBUG', 'INFO', 'WARN', 'ERROR', 'CRITICAL'],
+                        default='INFO',
+                        help='5 different levels available: DEBUG, INFO, WARN, \
+                        ERROR, CRITICAL')
     parser.add_argument('log',
-        nargs='+',
-        type=str,
-        help='Logs to print, a line return is done after each argument')
+                        nargs='+',
+                        type=str,
+                        help='Logs to print, a line return is done after each\
+                        argument')
     return parser.parse_args()
+
 
 def configure_logs():
     ch = logging.StreamHandler()
@@ -66,16 +68,18 @@ def configure_logs():
     logging.root.addHandler(ch)
     logging.root.setLevel(logging.DEBUG)
 
+
 def get_log(args):
     if not args.big:
         return '\n'.join(args.log)
     width = len(max(args.log, key=len)) + 4
-    lines = [ '#' * width ]
-    logs = [ '# {}{} #'.format(s, ' ' * (width - len(s) - 4)) for s in args.log ]
+    lines = ['#' * width]
+    logs = ['# {}{} #'.format(s, ' ' * (width - len(s) - 4)) for s in args.log]
     lines += logs
     lines.append('#' * width)
-    
+
     return '\n'.join(lines)
+
 
 def print_log(logs, args):
     if args.level == 'DEBUG':
@@ -88,6 +92,7 @@ def print_log(logs, args):
         logging.error(logs)
     elif args.level == 'CRITICAL':
         logging.critical(logs)
+
 
 if __name__ == '__main__':
     args = get_args()
