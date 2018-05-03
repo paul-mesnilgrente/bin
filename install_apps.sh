@@ -107,10 +107,8 @@ require_action 'Launch and configure Nextcloud.'
 [ -f examples.desktop ] && rm -rf examples.desktop
 [ -d Templates ] && rm -rf Templates
 [ -d Public ] && rm -rf Public
-[ ! -f ~/.hidden ] && echo bin >> ~/.hidden
-[ `grep -c '^bin$' ~/.hidden` -eq 0 ] && echo bin >> ~/.hidden
-[ ! -f ~/.hidden ] && echo bin >> ~/.hidden
-[ `grep -c '^snap$' ~/.hidden` -eq 0 ] && echo snap >> ~/.hidden
+grep '^bin$' ~/.hidden &> /dev/null || echo bin >> ~/.hidden
+grep '^snap$' ~/.hidden &> /dev/null || echo snap >> ~/.hidden
 
 require_action "End of the script."
 

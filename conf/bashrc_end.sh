@@ -1,12 +1,16 @@
-# POWERLINE
-if [ -f /usr/local/lib/python2.7/dist-packages/powerline/bindings/bash/powerline.sh ]; then
-    source /usr/local/lib/python2.7/dist-packages/powerline/bindings/bash/powerline.sh
-elif [ -f /usr/local/lib/python3.5/dist-packages/powerline/bindings/bash/powerline.sh ]; then
-    source /usr/local/lib/python3.5/dist-packages/powerline/bindings/bash/powerline.sh
-elif [ -f /usr/local/lib/python3.6/dist-packages/powerline/bindings/bash/powerline.sh ]; then
-    source /usr/local/lib/python3.6/dist-packages/powerline/bindings/bash/powerline.sh
-elif [ -f /home/paul/.pyenv/versions/3.6.5/envs/tools3/lib/python3.6/site-packages/powerline/bindings/bash/powerline.sh ]; then
-    source /home/paul/.pyenv/versions/3.6.5/envs/tools3/lib/python3.6/site-packages/powerline/bindings/bash/powerline.sh
+# POwERLINE
+if [ "$TERM" != "linux" ]; then
+    if type "powerline" &> /dev/null; then
+        usr_prefix='/usr/local/lib'
+        usr_suffix='dist-packages/powerline/bindings/bash/powerline.sh'
+        if [ -f "$usr_prefix/python2.7/$usr_suffix" ]; then
+            source "$usr_prefix/python2.7/$usr_suffix"
+        elif [ -f "$usr_prefix/python3.5/$usr_suffix" ]; then
+            source "$usr_prefix/python3.5/$usr_suffix"
+        elif [ -f "$usr_prefix/python3.6/$usr_suffix" ]; then
+            source "$usr_prefix/python3.6/$usr_suffix"
+        fi
+    fi
 fi
 
 source "${HOME}"/bin/tab_title.sh
