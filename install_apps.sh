@@ -8,10 +8,8 @@ function require_action {
     read y
 }
 
-sudo apt install -y python python-pip python3 python3-pip
-
 log.py -l ERROR 'Removing useless packages'
-sudo apt autoremove --purge -y ubuntu-web-launchers totem shotwell
+sudo apt autoremove --purge -y ubuntu-web-launchers totem shotwell shotwell-common
 
 log.py 'Adding sublime text ppa'
 sudo apt install -y apt-transport-https
@@ -41,7 +39,7 @@ log.py 'Install basic softwares and libraries'
 sudo apt install -y \
     easytag ttf-mscorefonts-installer \
     vlc gimp gnome-chess grisbi gparted \
-    sublime-text nextcloud-client libgnome2-bin \
+    sublime-text nextcloud-client telegram-desktop \
     nextcloud-client-nautilus darktable nodejs \
     php mysql-server php-mysql php-xml php-intl
 
@@ -54,11 +52,7 @@ sudo chmod a+x /usr/local/bin/symfony
 
 log.py 'Updating NPM'
 sudo npm install npm -g
-sudo chown -R $USER:$(id -gn $USER) $HOME/.config
 sudo npm install less -g
-
-log.py 'Installing Telegram'
-snap install telegram-desktop
 
 log.py 'Installing Messenger'
 wget 'https://updates.messengerfordesktop.com/download/linux/latest/beta?arch=amd64&pkg=deb' \
@@ -70,14 +64,10 @@ log.py 'Installing Whatsapp'
 log.py -l ERROR 'Nothing working without installing google chrome'
 
 log.py 'Installing Skype'
-wget 'https://go.skype.com/skypeforlinux-64.deb'
-sudo apt install -y ./skypeforlinux-64.deb
-rm skypeforlinux-64.deb
+sudo snap install --classic skype
 
 log.py 'Installing Slack'
-wget 'https://downloads.slack-edge.com/linux_releases/slack-desktop-3.0.5-amd64.deb'
-sudo dpkg --force-all -i ./slack-desktop-3.0.5-amd64.deb
-rm slack-desktop-3.0.5-amd64.deb
+sudo snap install --classic slack
 
 require_action 'System :
     - Install languages
@@ -112,15 +102,13 @@ require_action 'Sublime text :
     - Install the package control (one click in sublime),
     - Install markdown preview, LESS.'
 
-require_action 'Install language tools.'
-
 require_action 'Launch and configure Nextcloud.'
 
 [ -f examples.desktop ] && rm -rf examples.desktop
 [ -d Templates ] && rm -rf Templates
 [ -d Public ] && rm -rf Public
-[ ! -f ~/.hidden ] && echo bin >> ~/.hidden
-[ `grep -c '^bin$' ~/.hidden` -eq 0 ] && echo bin >> ~/.hidden
+grep '^bin$' ~/.hidden &> /dev/null || echo bin >> ~/.hidden
+grep '^snap$' ~/.hidden &> /dev/null || echo snap >> ~/.hidden
 
 require_action "End of the script."
 

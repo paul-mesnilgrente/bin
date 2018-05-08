@@ -2,24 +2,36 @@
 
 set -e
 
+sudo apt install -y tmux vim git python3-pip
+sudo pip install powerline-status
 ######################################################
-# Install prerequisities                             #
+# Install pyenv                                      #
 ######################################################
-sudo apt install -y python3 python3-pip python python-pip tmux curl
-sudo pip install --upgrade pip
-sudo pip3 install --upgrade pip
+sudo apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
+libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
+xz-utils tk-dev
+curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+echo 'export PATH="~/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"' >> .bashrc
+export PATH="~/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+pyenv install 3.6.5
+pyenv install 2.7.15rc1
+pyenv virtualenv 3.6.5 tools3
+pyenv virtualenv 2.7.15rc1 tools2
+pyenv activate tools3
 
 ######################################################
 # Install some utils                                 #
 ######################################################
-sudo apt install -y cowsay fortune-mod lolcat htop tree
-sudo pip install speedtest-cli
+sudo apt install -y cowsay fortune-mod lolcat htop tree sl
+pip install speedtest-cli
 
 ######################################################
 # Install powerline                                  #
 ######################################################
-sudo pip install powerline-status
-
 wget https://github.com/Lokaltog/powerline/raw/develop/font/10-powerline-symbols.conf
 sudo mv 10-powerline-symbols.conf /etc/fonts/conf.d/
 
@@ -64,8 +76,12 @@ git clone https://github.com/plasticboy/vim-markdown ~/.vim/bundle/vim-markdown
 git clone https://github.com/godlygeek/tabular.git ~/.vim/bundle/tabular
 
 # MARDOWN Preview
-sudo pip install grip
+pip install grip
 git clone https://github.com/JamshedVesuna/vim-markdown-preview ~/.vim/bundle/vim-markdown-preview
+
+# SYNTASTIC
+pip install flake8
+git clone --depth=1 https://github.com/vim-syntastic/syntastic ~/.vim/bundle/syntastic
 
 ######################################################
 # Configure octave                                   #
@@ -78,7 +94,7 @@ ln -s ~/bin/conf/octaverc ~/.octaverc
 ######################################################
 [ -f ~/.tvrc -o -h ~/.tvrc ] && rm ~/.tvrc
 
-sudo pip install terminal_velocity
+pip install terminal_velocity
 ln -s ~/bin/conf/tvrc ~/.tvrc
 
 ######################################################
@@ -90,3 +106,5 @@ ln -s ~/bin/conf/bash_aliases ~/.bash_aliases
 ln -s ~/bin/conf/gitconfig ~/.gitconfig
 
 echo "source ~/bin/conf/bashrc_end.sh" >> ~/.bashrc
+pyenv deactivate
+pyenv global 3.6.5 2.7.15rc1 tools3 tools2
