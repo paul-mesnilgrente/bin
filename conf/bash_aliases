@@ -8,10 +8,10 @@ alias autoremove='sudo apt autoremove --purge'
 
 # symfony
 alias sy='php bin/console'
-alias sy_dbupdate='sy doctrine:schema:update'
+alias sy_updatedb='sy doctrine:schema:update'
 alias sy_ge='sy doctrine:generate:entity'
-alias sy_gf='sy doctrine:generate:form'
 alias sy_ges='sy doctrine:generate:entities'
+alias sy_gf='sy doctrine:generate:form'
 alias sy_clearp='sy cache:clear --no-warmup --env=prod'
 alias sy_cleard='sy cache:clear --no-warmup --env=dev'
 alias sy_load_fixt='sy doctrine:fixtures:load'
