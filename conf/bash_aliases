@@ -17,6 +17,13 @@ alias sy_cleard='sy cache:clear --no-warmup --env=dev'
 alias sy_load_fixt='sy doctrine:fixtures:load'
 alias sy_gen_assets='sy_clearp && sy_cleard && sy assetic:dump --no-debug --env=prod'
 
+# flask
+function fl_run {
+    export FLASK_ENV=development
+    export FLASK_APP="$1"
+    flask run
+}
+
 # divers
 alias gdb='gdb -q'
 alias octave-cli='octave-cli -q'
@@ -29,6 +36,8 @@ alias my_alert='notify-send --urgency=low \
                             -i "$([ $? = 0 ] && echo terminal || echo error)" \
                             "$(history|tail -n2|head -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"; \
                 paplay /usr/share/sounds/ubuntu/notifications/Mallet.ogg'
+alias check_boot='[ -d /sys/firmware/efi ] && echo UEFI || echo BIOS'
+alias publicip='curl ipinfo.io/ip'
 
 # server
 alias occ='sudo -u www-data php /var/www/nextcloud/occ'
