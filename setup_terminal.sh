@@ -58,9 +58,7 @@ npm install -g joplin
 ######################################################
 # Install powerline                                  #
 ######################################################
-wget https://github.com/Lokaltog/powerline/raw/develop/font/10-powerline-symbols.conf
-sudo mv 10-powerline-symbols.conf /etc/fonts/conf.d/
-
+sudo cp ~/bin/assets/10-powerline-symbols.conf /etc/fonts/conf.d/
 sudo cp ~/bin/assets/powerline-symbols.ttf /usr/share/fonts/
 sudo fc-cache -vf
 
