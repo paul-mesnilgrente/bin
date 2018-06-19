@@ -28,9 +28,6 @@ sudo add-apt-repository -y ppa:pmjdebruijn/darktable-release
 log.py 'Adding LibreOffice ppa'
 sudo add-apt-repository -y ppa:libreoffice/ppa
 
-log.py 'Adding NodeJS ppa'
-curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-
 log.py 'Update and upgrade packages'
 sudo apt update && sudo apt -y upgrade
 
@@ -49,10 +46,6 @@ install_composer.sh
 log.py 'Installing symfony'
 sudo curl -LsS https://symfony.com/installer -o /usr/local/bin/symfony
 sudo chmod a+x /usr/local/bin/symfony
-
-log.py 'Updating NPM'
-sudo npm install npm -g
-sudo npm install less -g
 
 log.py 'Installing Messenger'
 wget 'https://updates.messengerfordesktop.com/download/linux/latest/beta?arch=amd64&pkg=deb' \
@@ -86,7 +79,7 @@ require_action 'Mozilla thunderbird :
         - CardBook.'
 
 require_action 'Mozilla firefox :
-    - Install lastpass,
+    - Install bitwarden,
     - Remove bookmarks,
     - Synchro firefox,
     - Go on https://startpage.com/ and set it up,

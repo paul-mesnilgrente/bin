@@ -2,32 +2,58 @@
 
 set -e
 
+echo '
+# basic configuration
+source $HOME/bin/conf/bashrc_end.sh' >> ~/.bashrc
 sudo apt install -y tmux vim git python3-pip
+sudo pip3 install -U pip
 sudo pip install powerline-status
+
+######################################################
+# Install NodeJS                                     #
+######################################################
+# install NodeJS basics
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+sudo apt update
+sudo apt install nodejs
+# configure npm
+mkdir ~/.npm-global
+npm config set prefix '~/.npm-global'
+# activate new NPM path
+export PATH=~/.npm-global/bin:$PATH
+echo '
+# NPM configuration
+export PATH=$HOME/.npm-global/bin:$PATH' >> ~/.bashrc
+# activate new NPM path for every new bash
+npm install -g npm
+
 ######################################################
 # Install pyenv                                      #
 ######################################################
+# install pyenv basics
 sudo apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
 libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
 xz-utils tk-dev
 curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-echo 'export PATH="~/.pyenv/bin:$PATH"
+# activate pyenv on every new bash
+echo '
+# pyenv configuration
+export PATH="~/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"' >> .bashrc
+# activate pyenv in the script
 export PATH="~/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
+# install python versions
 pyenv install 3.6.5
-pyenv install 2.7.15rc1
-pyenv virtualenv 3.6.5 tools3
-pyenv virtualenv 2.7.15rc1 tools2
-pyenv activate tools3
+pyenv install 2.7.15
 
 ######################################################
 # Install some utils                                 #
 ######################################################
 sudo apt install -y cowsay fortune-mod lolcat htop tree sl
-pip install speedtest-cli
+npm install -g joplin
 
 ######################################################
 # Install powerline                                  #
@@ -35,16 +61,7 @@ pip install speedtest-cli
 wget https://github.com/Lokaltog/powerline/raw/develop/font/10-powerline-symbols.conf
 sudo mv 10-powerline-symbols.conf /etc/fonts/conf.d/
 
-if [ -f ~/bin/assets/powerline-symbols.ttf ]; then
-    sudo cp ~/bin/assets/powerline-symbols.ttf /usr/share/fonts/
-else
-    # patch found on https://github.com/oconnor663/powerline-fontpacher
-    sudo apt install -y fontforge 
-    wget https://raw.githubusercontent.com/oconnor663/powerline-fontpatcher/master/fonts/powerline-symbols.sfd
-    fontforge -lang ff -c 'Open($1); Generate($2)' powerline-symbols.sfd powerline-symbols.ttf
-    rm powerline-symbols.sfd
-    sudo mv powerline-symbols.ttf /usr/share/fonts/
-fi
+sudo cp ~/bin/assets/powerline-symbols.ttf /usr/share/fonts/
 sudo fc-cache -vf
 
 ######################################################
@@ -76,11 +93,11 @@ git clone https://github.com/plasticboy/vim-markdown ~/.vim/bundle/vim-markdown
 git clone https://github.com/godlygeek/tabular.git ~/.vim/bundle/tabular
 
 # MARDOWN Preview
-pip install grip
+sudo pip install grip
 git clone https://github.com/JamshedVesuna/vim-markdown-preview ~/.vim/bundle/vim-markdown-preview
 
 # SYNTASTIC
-pip install flake8
+sudo pip install flake8
 git clone --depth=1 https://github.com/vim-syntastic/syntastic ~/.vim/bundle/syntastic
 
 ######################################################
@@ -90,14 +107,6 @@ git clone --depth=1 https://github.com/vim-syntastic/syntastic ~/.vim/bundle/syn
 ln -s ~/bin/conf/octaverc ~/.octaverc
 
 ######################################################
-# Configure terminal_velocity                        #
-######################################################
-[ -f ~/.tvrc -o -h ~/.tvrc ] && rm ~/.tvrc
-
-pip install terminal_velocity
-ln -s ~/bin/conf/tvrc ~/.tvrc
-
-######################################################
 # Configure bash                                     #
 ######################################################
 [ -f ~/.bash_aliases -o -h ~/.bash_aliases ] && rm ~/.bash_aliases
@@ -105,6 +114,5 @@ ln -s ~/bin/conf/tvrc ~/.tvrc
 ln -s ~/bin/conf/bash_aliases ~/.bash_aliases
 ln -s ~/bin/conf/gitconfig ~/.gitconfig
 
-echo "source ~/bin/conf/bashrc_end.sh" >> ~/.bashrc
 pyenv deactivate
-pyenv global 3.6.5 2.7.15rc1 tools3 tools2
+pyenv global 3.6.5 2.7.15
