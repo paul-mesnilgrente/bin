@@ -21,9 +21,6 @@ mkdir ~/.npm-global
 npm config set prefix '~/.npm-global'
 # activate new NPM path
 export PATH=~/.npm-global/bin:$PATH
-echo '
-# NPM configuration
-export PATH=$HOME/.npm-global/bin:$PATH' >> ~/.bashrc
 # activate new NPM path for every new bash
 npm install -g npm
 
@@ -35,12 +32,6 @@ sudo apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
 libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
 xz-utils tk-dev
 curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-# activate pyenv on every new bash
-echo '
-# pyenv configuration
-export PATH="~/.pyenv/bin:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"' >> .bashrc
 # activate pyenv in the script
 export PATH="~/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
