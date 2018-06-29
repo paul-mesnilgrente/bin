@@ -5,7 +5,7 @@ set -e
 echo '
 # basic configuration
 source $HOME/bin/conf/bashrc_end.sh' >> ~/.bashrc
-sudo apt install -y tmux vim git python3-pip
+sudo apt install -y tmux vim git python3-pip xclip
 sudo pip3 install -U pip
 sudo pip install powerline-status
 
