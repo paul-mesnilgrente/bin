@@ -45,6 +45,14 @@ pyenv install 2.7.15
 ######################################################
 sudo apt install -y cowsay fortune-mod lolcat htop tree sl
 npm install -g joplin
+joplin config sync.target 5
+joplin config sync.5.path
+joplin config sync.5.path 'https://nextcloud.paul-mesnilgrente.com/remote.php/webdav/NOTES'
+joplin config sync.5.username 'Paul Mesnilgrente'
+print 'Please enter your nextcloud password to access Joplin notes:'
+read password
+joplin config sync.5.password "${password}"
+joplin sync
 
 ######################################################
 # Install powerline                                  #
