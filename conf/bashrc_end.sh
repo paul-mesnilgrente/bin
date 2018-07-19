@@ -21,7 +21,7 @@ if [ ! -d "${HOME}/.pyenv/bin" ]; then
 else
     echo $PATH | grep '.pyenv' > /dev/null
     if [ $? -ne 0 ]; then
-        export PATH="~/.pyenv/bin:$PATH"
+        export PATH="${HOME}/.pyenv/bin:$PATH"
         eval "$(pyenv init -)"
         eval "$(pyenv virtualenv-init -)"
     fi
