@@ -42,6 +42,32 @@ alias publicip='curl ipinfo.io/ip'
 # server
 alias occ='sudo -u www-data php /var/www/nextcloud/occ'
 
+# eosio
+alias runeos='docker run --rm \
+--name eosio -d \
+-p 8888:8888 \
+-p 9876:9876 \
+-v /tmp/work:/work \
+-v /tmp/eosio/data:/mnt/dev/data \
+-v /tmp/eosio/config:/mnt/dev/config \
+eosio/eos-dev  /bin/bash -c \
+"nodeos -e -p eosio \
+--plugin eosio::wallet_api_plugin \
+--plugin eosio::wallet_plugin \
+--plugin eosio::producer_plugin \
+--plugin eosio::history_plugin \
+--plugin eosio::chain_api_plugin \
+--plugin eosio::history_api_plugin \
+--plugin eosio::http_plugin \
+-d /mnt/dev/data \
+--config-dir /mnt/dev/config \
+--http-server-address=0.0.0.0:8888 \
+--access-control-allow-origin=* \
+--contracts-console"'
+alias cleos='docker exec eosio /opt/eosio/bin/cleos --wallet-url http://localhost:8888'
+alias ineos='docker container exec -it eosio /bin/bash'
+alias eosiocpp='docker exec eosio /opt/eosio/bin/eosiocpp'
+
 # dev
 alias catkin_maked='catkin_make -DCMAKE_BUILD_TYPE=Debug'
 alias catkin_maket='catkin_make -DCMAKE_BUILD_TYPE=Debug run_tests_mario'
