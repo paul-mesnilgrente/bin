@@ -57,9 +57,11 @@ joplin sync
 ######################################################
 # Install powerline                                  #
 ######################################################
-sudo cp ~/bin/assets/10-powerline-symbols.conf /etc/fonts/conf.d/
-sudo cp ~/bin/assets/powerline-symbols.ttf /usr/share/fonts/
-sudo fc-cache -vf
+if [ ! -e /etc/fonts/conf.d/10-powerline-symbols.conf ]; then
+    sudo cp ~/bin/assets/10-powerline-symbols.conf /etc/fonts/conf.d/
+    sudo cp ~/bin/assets/powerline-symbols.ttf /usr/share/fonts/
+    sudo fc-cache -vf
+fi
 
 ######################################################
 # Configure tmux                                     #
@@ -79,23 +81,38 @@ ln -s ~/bin/conf/vimrc ~/.vimrc
 mkdir -p ~/.vim/autoload ~/.vim/bundle
 curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 
+function install_plugin {
+    plugin=`echo $1 | cut -d '/' -f 5`
+    if [ -d "$HOME/.vim/bundle/$plugin" ]; then
+        tmp=`pwd`
+        cd "$HOME/.vim/bundle/$plugin"
+        git pull
+        cd "$tmp"
+    else
+        git clone --depth 1 "$1" "$plugin"
+    fi
+}
+
 # COLORSCHEME
-git clone https://github.com/flazz/vim-colorschemes ~/.vim/bundle/vim-colorschemes
+install_plugin https://github.com/flazz/vim-colorschemes
 
 # C++11 highlighting
-git clone https://github.com/octol/vim-cpp-enhanced-highlight.git ~/.vim/bundle/vim-cpp-enhanced-highlight
+install_plugin https://github.com/octol/vim-cpp-enhanced-highlight
 
 # MARDOWN Highlighting and commands
-git clone https://github.com/plasticboy/vim-markdown ~/.vim/bundle/vim-markdown
-git clone https://github.com/godlygeek/tabular.git ~/.vim/bundle/tabular
+install_plugin https://github.com/plasticboy/vim-markdown
+install_plugin https://github.com/godlygeek/tabular
 
 # MARDOWN Preview
 sudo pip install grip
-git clone https://github.com/JamshedVesuna/vim-markdown-preview ~/.vim/bundle/vim-markdown-preview
+install_plugin https://github.com/JamshedVesuna/vim-markdown-preview
 
 # SYNTASTIC
 sudo pip install flake8
-git clone --depth=1 https://github.com/vim-syntastic/syntastic ~/.vim/bundle/syntastic
+install_plugin --depth=1 https://github.com/vim-syntastic/syntastic
+
+# CtrlP
+install_plugin https://github.com/kien/ctrlp.vim
 
 ######################################################
 # Configure octave                                   #
