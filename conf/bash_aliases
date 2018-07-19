@@ -43,7 +43,7 @@ alias publicip='curl ipinfo.io/ip'
 alias occ='sudo -u www-data php /var/www/nextcloud/occ'
 
 # eosio
-alias runeos='docker run --rm \
+alias druneos='docker run --rm \
 --name eosio -d \
 -p 8888:8888 \
 -p 9876:9876 \
@@ -64,9 +64,20 @@ eosio/eos-dev  /bin/bash -c \
 --http-server-address=0.0.0.0:8888 \
 --access-control-allow-origin=* \
 --contracts-console"'
-alias cleos='docker exec eosio /opt/eosio/bin/cleos --wallet-url http://localhost:8888'
-alias ineos='docker container exec -it eosio /bin/bash'
-alias eosiocpp='docker exec eosio /opt/eosio/bin/eosiocpp'
+alias dcleos='docker exec eosio /opt/eosio/bin/cleos --wallet-url http://localhost:8888'
+alias deosiocpp='docker exec eosio /opt/eosio/bin/eosiocpp'
+alias deos='docker container exec -it eosio /bin/bash'
+alias runeos='nodeos -e -p eosio \
+--plugin eosio::wallet_api_plugin \
+--plugin eosio::wallet_plugin \
+--plugin eosio::producer_plugin \
+--plugin eosio::history_plugin \
+--plugin eosio::chain_api_plugin \
+--plugin eosio::history_api_plugin \
+--plugin eosio::http_plugin \
+--http-server-address=0.0.0.0:8888 \
+--access-control-allow-origin=* \
+--contracts-console'
 
 # dev
 alias catkin_maked='catkin_make -DCMAKE_BUILD_TYPE=Debug'
