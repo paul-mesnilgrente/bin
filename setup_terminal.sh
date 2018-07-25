@@ -43,7 +43,7 @@ pyenv install 2.7.15
 ######################################################
 # Install some utils                                 #
 ######################################################
-sudo apt install -y cowsay fortune-mod lolcat htop tree sl
+sudo apt install -y cowsay cowsay-off fortune-mod lolcat htop tree sl
 npm install -g joplin
 joplin config sync.target 5
 joplin config sync.5.path
@@ -130,3 +130,9 @@ ln -s ~/bin/conf/gitconfig ~/.gitconfig
 
 pyenv deactivate
 pyenv global 3.6.5 2.7.15
+
+######################################################
+# Configure Bitwarden                                #
+######################################################
+sudo snap install bw
+bw config server 'https://bitwarden.paul-mesnilgrente.com/'
