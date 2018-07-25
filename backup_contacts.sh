@@ -74,8 +74,13 @@ if [ "$force" = "false" ]; then
                  "[$username]Contacts Backup -> up to date" \
                  "Already up to date."
             mv "$filepath" "$filepath_save"
+            log.py "Email sent, files up-to-date"
             exit 0
+        else
+            log.py -l ERROR "diff return a difference"
         fi
+    else
+        log.py -l ERROR "filepath_save does not exist"
     fi
 fi
 
@@ -83,7 +88,7 @@ sendmail.php "Paul Mesnilgrente <web@paul-mesnilgrente.com>" \
              "[$username]Contacts Backup -> changed" \
              "backup" \
              "$filepath"
-
+log.py "forced, email sent"
 mv "$filepath" "$filepath_save"
 
 exit 0

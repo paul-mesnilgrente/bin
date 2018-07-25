@@ -46,7 +46,7 @@ if [ "$force" = "false" ]; then
     if [ -f "$filepath_save" ]; then
         grep -v '<dateCreated>' "$filepath" > "$filepath_tmp1"
         grep -v '<dateCreated>' "$filepath_save" > "$filepath_tmp2"
-        diff "$filepath_tmp1" "$filepath_tmp2"
+        diff "$filepath_tmp1" "$filepath_tmp2" > /dev/null
         if [ $? -eq 0 ]; then
             sendmail.php "Paul Mesnilgrente <web@paul-mesnilgrente.com>" \
                  "[$username]FreshRSS Backup -> up to date" \
