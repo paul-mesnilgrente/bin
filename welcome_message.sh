@@ -16,20 +16,12 @@ if [ $? -ne 0 ]; then
 fi
 
 # get files
-nb_line=`cowsay -l | wc -l`
-nb_line=`expr $nb_line - 1`
-text=`cowsay -l | tail -n $nb_line`
+files=`cowsay -l | cut -d ':' -f 2`
 
 # pick one random index file
-nb_file=`echo $text | wc -w`
-# +1 to have the possibility to pick the last file
-nb_file=`expr $nb_file + 1`
-number=0
-while [ "$number" -eq 0 ]; do
-    number=$RANDOM
-    number=`expr $number % $nb_file`
-done
+nb_file=`echo $files | wc -w`
+let "number = ($RANDOM % $nb_file) + 1"
 
 # get the filename and display
-filename=`echo $text | cut -d ' ' -f $number`
-fortune | cowsay -f $filename | lolcat
+file=`echo $files | cut -d ' ' -f $number`
+fortune | cowsay -f $file | lolcat
