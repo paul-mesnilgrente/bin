@@ -2,38 +2,66 @@
 
 set -e
 
+echo '
+# basic configuration
+source $HOME/bin/conf/bashrc_end.sh' >> ~/.bashrc
+sudo apt install -y tmux vim git python3-pip xclip
+sudo pip3 install -U pip
+sudo pip install powerline-status
+
 ######################################################
-# Install prerequisities                             #
+# Install NodeJS                                     #
 ######################################################
-sudo apt install -y python3 python3-pip python python-pip tmux curl
-sudo pip install --upgrade pip
-sudo pip3 install --upgrade pip
+# install NodeJS basics
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+sudo apt update
+sudo apt install nodejs
+# configure npm
+mkdir ~/.npm-global
+npm config set prefix '~/.npm-global'
+# activate new NPM path
+export PATH=~/.npm-global/bin:$PATH
+# activate new NPM path for every new bash
+npm install -g npm
+
+######################################################
+# Install pyenv                                      #
+######################################################
+# install pyenv basics
+sudo apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
+libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
+xz-utils tk-dev
+curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+# activate pyenv in the script
+export PATH="~/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+# install python versions
+pyenv install 3.6.5
+pyenv install 2.7.15
 
 ######################################################
 # Install some utils                                 #
 ######################################################
-sudo apt install -y cowsay fortune-mod lolcat htop
-sudo pip install speedtest-cli
+sudo apt install -y cowsay cowsay-off fortune-mod lolcat htop tree sl
+npm install -g joplin
+joplin config sync.target 5
+joplin config sync.5.path
+joplin config sync.5.path 'https://nextcloud.paul-mesnilgrente.com/remote.php/webdav/NOTES'
+joplin config sync.5.username 'Paul Mesnilgrente'
+print 'Please enter your nextcloud password to access Joplin notes:'
+read password
+joplin config sync.5.password "${password}"
+joplin sync
 
 ######################################################
 # Install powerline                                  #
 ######################################################
-sudo pip install powerline-status
-
-wget https://github.com/Lokaltog/powerline/raw/develop/font/10-powerline-symbols.conf
-sudo mv 10-powerline-symbols.conf /etc/fonts/conf.d/
-
-if [ -f ~/bin/assets/powerline-symbols.ttf ]; then
+if [ ! -e /etc/fonts/conf.d/10-powerline-symbols.conf ]; then
+    sudo cp ~/bin/assets/10-powerline-symbols.conf /etc/fonts/conf.d/
     sudo cp ~/bin/assets/powerline-symbols.ttf /usr/share/fonts/
-else
-    # patch found on https://github.com/oconnor663/powerline-fontpacher
-    sudo apt install -y fontforge 
-    wget https://raw.githubusercontent.com/oconnor663/powerline-fontpatcher/master/fonts/powerline-symbols.sfd
-    fontforge -lang ff -c 'Open($1); Generate($2)' powerline-symbols.sfd powerline-symbols.ttf
-    rm powerline-symbols.sfd
-    sudo mv powerline-symbols.ttf /usr/share/fonts/
+    sudo fc-cache -vf
 fi
-sudo fc-cache -vf
 
 ######################################################
 # Configure tmux                                     #
@@ -53,33 +81,44 @@ ln -s ~/bin/conf/vimrc ~/.vimrc
 mkdir -p ~/.vim/autoload ~/.vim/bundle
 curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 
+function install_plugin {
+    plugin=`echo $1 | cut -d '/' -f 5`
+    if [ -d "$HOME/.vim/bundle/$plugin" ]; then
+        tmp=`pwd`
+        cd "$HOME/.vim/bundle/$plugin"
+        git pull
+        cd "$tmp"
+    else
+        git clone --depth 1 "$1" "$plugin"
+    fi
+}
+
 # COLORSCHEME
-git clone https://github.com/flazz/vim-colorschemes ~/.vim/bundle/vim-colorschemes
+install_plugin https://github.com/flazz/vim-colorschemes
 
 # C++11 highlighting
-git clone https://github.com/octol/vim-cpp-enhanced-highlight.git ~/.vim/bundle/vim-cpp-enhanced-highlight
+install_plugin https://github.com/octol/vim-cpp-enhanced-highlight
 
 # MARDOWN Highlighting and commands
-git clone https://github.com/plasticboy/vim-markdown ~/.vim/bundle/vim-markdown
-git clone https://github.com/godlygeek/tabular.git ~/.vim/bundle/tabular
+install_plugin https://github.com/plasticboy/vim-markdown
+install_plugin https://github.com/godlygeek/tabular
 
 # MARDOWN Preview
 sudo pip install grip
-git clone https://github.com/JamshedVesuna/vim-markdown-preview ~/.vim/bundle/vim-markdown-preview
+install_plugin https://github.com/JamshedVesuna/vim-markdown-preview
+
+# SYNTASTIC
+sudo pip install flake8
+install_plugin --depth=1 https://github.com/vim-syntastic/syntastic
+
+# CtrlP
+install_plugin https://github.com/kien/ctrlp.vim
 
 ######################################################
 # Configure octave                                   #
 ######################################################
 [ -f ~/.octaverc -o -h ~/.octaverc ] && rm ~/.octaverc
 ln -s ~/bin/conf/octaverc ~/.octaverc
-
-######################################################
-# Configure terminal_velocity                        #
-######################################################
-[ -f ~/.tvrc -o -h ~/.tvrc ] && rm ~/.tvrc
-
-sudo pip install terminal_velocity
-ln -s ~/bin/conf/tvrc ~/.tvrc
 
 ######################################################
 # Configure bash                                     #
@@ -89,4 +128,11 @@ ln -s ~/bin/conf/tvrc ~/.tvrc
 ln -s ~/bin/conf/bash_aliases ~/.bash_aliases
 ln -s ~/bin/conf/gitconfig ~/.gitconfig
 
-echo "source ~/bin/conf/bashrc_end.sh" >> ~/.bashrc
+pyenv deactivate
+pyenv global 3.6.5 2.7.15
+
+######################################################
+# Configure Bitwarden                                #
+######################################################
+sudo snap install bw
+bw config server 'https://bitwarden.paul-mesnilgrente.com/'

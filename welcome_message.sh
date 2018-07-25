@@ -1,26 +1,27 @@
 #!/bin/bash
 
-dpkg -s cowsay fortune-mod lolcat &> /dev/null
+for package in cowsay fortune-mod; do
+    dpkg -s ${package} &> /dev/null
+    if [ $? -ne 0 ]; then
+        echo "Please install ${package} before to run $0"
+        exit 1
+    fi
+done
+echo "test" | lolcat &> /tmp/lolcat_error
 if [ $? -ne 0 ]; then
-    echo "Please install cowsay fortune-mod and lolcat before to run $0"
-    exit 1
+    echo "Please install lolcat before to run $0"
+    echo "ERROR:"
+    cat /tmp/lolcat_error
+    exit 2
 fi
 
 # get files
-nb_line=`/usr/games/cowsay -l | wc -l`
-nb_line=`expr $nb_line - 1`
-text=`/usr/games/cowsay -l | tail -n $nb_line`
+files=`cowsay -l | cut -d ':' -f 2`
 
 # pick one random index file
-nb_file=`echo $text | wc -w`
-# +1 to have the possibility to pick the last file
-nb_file=`expr $nb_file + 1`
-number=0
-while [ "$number" -eq 0 ]; do
-    number=$RANDOM
-    number=`expr $number % $nb_file`
-done
+nb_file=`echo $files | wc -w`
+let "number = ($RANDOM % $nb_file) + 1"
 
 # get the filename and display
-filename=`echo $text | cut -d ' ' -f $number`
-/usr/games/fortune | /usr/games/cowsay -f $filename | /usr/games/lolcat
+file=`echo $files | cut -d ' ' -f $number`
+fortune | cowsay -f $file | lolcat
