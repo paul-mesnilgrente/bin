@@ -19,12 +19,9 @@ fi
 if [ ! -d "${HOME}/.pyenv/bin" ]; then
     echo "You should install pyenv."
 else
-    echo $PATH | grep '.pyenv' > /dev/null
-    if [ $? -ne 0 ]; then
-        export PATH="${HOME}/.pyenv/bin:$PATH"
-        eval "$(pyenv init -)"
-        eval "$(pyenv virtualenv-init -)"
-    fi
+    export PATH="${HOME}/.pyenv/bin:$PATH"
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
 fi
 
 source "${HOME}"/bin/tab_title.sh
