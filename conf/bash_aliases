@@ -52,8 +52,6 @@ alias druneos='docker run --rm \
 -v /tmp/eosio/config:/mnt/dev/config \
 eosio/eos-dev  /bin/bash -c \
 "nodeos -e -p eosio \
---plugin eosio::wallet_api_plugin \
---plugin eosio::wallet_plugin \
 --plugin eosio::producer_plugin \
 --plugin eosio::history_plugin \
 --plugin eosio::chain_api_plugin \
@@ -68,8 +66,6 @@ alias dcleos='docker exec eosio /opt/eosio/bin/cleos --wallet-url http://localho
 alias deosiocpp='docker exec eosio /opt/eosio/bin/eosiocpp'
 alias deos='docker container exec -it eosio /bin/bash'
 alias runeos='nodeos -e -p eosio \
---plugin eosio::wallet_api_plugin \
---plugin eosio::wallet_plugin \
 --plugin eosio::producer_plugin \
 --plugin eosio::history_plugin \
 --plugin eosio::chain_api_plugin \
