@@ -3,7 +3,7 @@
 from pyquery import PyQuery as pq
 from urllib.parse import urlparse, urljoin
 from pathlib import Path
-from os.path import splitext
+from os.path import splitext, isdir
 from os import mkdir
 import requests
 import shutil
@@ -56,6 +56,7 @@ class Chapter:
     def __init__(self, number, url):
         self.url = url
         self.number = int(number)
+        self.pages = []
 
     def __eq__(self, other):
         if isinstance(other, int):
@@ -69,11 +70,7 @@ class Manga:
     def __init__(self, name, url):
         self.name = name
         self.url = url
-        self.chapters = []
-
-    def find_chapter(self, chapter_number):
-        index = self.chapters.index(int(chapter_number))
-        return self.chapters[index]
+        self.chapters = {}
 
     def __eq__(self, other):
         if isinstance(other, str):
@@ -85,49 +82,51 @@ class Manga:
 class Source:
     def __init__(self, url):
         self.url = urlparse(url)
-        self.mangas = []
+        self.mangas = {}
 
     def base_url(self):
         return self.url.scheme + '://' + self.url.netloc
 
-    def find_manga(self, manga_title):
-        if self.mangas == []:
-            self.download_manga_list()
-        index = self.mangas.index(manga_title)
-        self.download_chapter_list(self.mangas[index])
-        return self.mangas[index]
-
-    def download_manga_list(self):
+    def load_mangas(self):
         raise NotImplementedError('please implement this function')
 
-    def download_chapter_list(self, manga):
+    def load_manga_chapters(self, manga):
         raise NotImplementedError('please implement this function')
 
-    def download_chapter_images(self, manga, chapter, folder):
-        try:
-            mkdir(folder)
-        except:
-            pass
+    def load_chapter(self, chapter):
+        raise NotImplementedError('please implement this function')
+
+    def save_chapter(self, chapter, folder):
+        if isdir(folder):
+            shutils.rmtree(folder)
+        mkdir(folder)
+        for page in chapter.pages:
+            src = page.image.url
+            path = '{}/{:02d}{}'.format(folder, page.number, splitext(urlparse(src).path)[1])
+            page.image.save(path)
 
 
 class Lelscan(Source):
     def __init__(self):
         super().__init__('http://lelscanv.com') 
 
-    def download_manga_list(self):
+    def load_mangas(self):
         d = pq(url=self.base_url() + '/lecture-en-ligne-one-piece.php')
         options = d('form[action="/lecture-en-ligne.php"] select:nth-child(2) option')
         for option in options.items():
-            self.mangas.append(Manga(option.text(), option.attr.value))
+            title = option.text()
+            url = option.attr.value
+            self.mangas[title] = Manga(title, url)
         
-    def download_chapter_list(self, manga):
+    def load_manga_chapters(self, manga):
         d = pq(url=manga.url)
         options = d('form[action="/lecture-en-ligne.php"] select:nth-child(1) option')
         for option in options.items():
-            manga.chapters.append(Chapter(option.text(), option.attr.value))
+            url = option.attr.value
+            chapter_number = int(option.text())
+            manga.chapters[chapter_number] = Chapter(chapter_number, url)
 
-    def download_chapter_images(self, manga, chapter, folder):
-        super().download_chapter_images(manga, chapter, folder)
+    def load_chapter(self, chapter):
         d = pq(url=chapter.url)
         # get the pages links containing the pictures and remove prev/next links
         chapter.pages = [Page(i, link.attr.href) for i, link in enumerate(d.items('#navigation a'))]
@@ -141,22 +140,24 @@ class Lelscan(Source):
             src = d('#image img').attr.src
             page.image = Image(page.number, urljoin(self.base_url(), src))
             page.image.download()
-            # save image
-            path = '{}/{:02d}{}'.format(folder, page.number, splitext(urlparse(src).path)[1])
-            page.image.save(path)
 
 
 class Scantrad(Source):
     def __init__(self):
         super().__init__('https://scantrad.fr') 
 
-    def download_manga_list(self):
+    def load_mangas(self):
         d = pq(url=self.base_url() + '/mangas')
         links = d('ul#projects-list li a')
         for link in links.items():
-            self.mangas.append(Manga(link('span.project-name').text(), link.attr.href))
+            title = link('span.project-name').text()
+            url = link.attr.href
+            self.mangas[title] = Manga(title, url)
  
-    def download_chapter_list(self, manga):
+    def load_manga_chapters(self, manga):
+        raise NotImplementedError('please implement this function')
+
+    def load_chapter(self, chapter):
         raise NotImplementedError('please implement this function')
 
 
@@ -164,31 +165,46 @@ class MangaReader(Source):
     def __init__(self):
         super().__init__('http://www.manga.reader.net')
 
-    def download_manga_list(self):
+    def load_mangas(self):
         d = pq(url=self.base_url() + '/alphabetical')
         links = d('ul.series_alpha li a')
         for link in links.items():
-            self.mangas.append(Manga(link.text(), link.attr.href))
+            title = link.text()
+            url = link.attr.href
+            self.mangas[title] = Manga(title, url)
 
-    def download_chapter_list(self, manga):
+    def load_manga_chapters(self, manga):
+        raise NotImplementedError('please implement this function')
+
+    def load_chapter(self, chapter):
         raise NotImplementedError('please implement this function')
 
 
 if __name__ == '__main__':
     args = get_args()
-    sources = [
-        (Lelscan(), 'lelscan'),
-        (Scantrad(), 'scantrad'),
-        (MangaReader(), 'mangareader')
-    ]
-    for source in sources:
-        if args.source == source[1]:
-            # find the manga asked for
-            print('Searching manga...')
-            manga = source[0].find_manga(args.manga)
-            # check the chapters
-            print('Searching chapter...')
-            chapter = manga.find_chapter(args.chapter)
-            # download the chapter
-            print('Downloading "{}" - {:03d}...'.format(manga.name, chapter.number))
-            source[0].download_chapter_images(manga, chapter, 'tmp')
+    sources = {
+        'lelscan': Lelscan(),
+        'scantrad': Scantrad(),
+        'mangareader': MangaReader()
+    }
+    source = sources[args.source]
+    # load mangas
+    print('Loading mangas from {}...'.format(args.source))
+    source.load_mangas()
+
+    # load manga chapters
+    print('Loading "{}" chapters...'.format(args.manga))
+    manga = source.mangas[args.manga]
+    source.load_manga_chapters(manga)
+
+    # load chapter
+    print('Loading chapter {} of "{}"...'.format(args.chapter, args.manga))
+    chapter = manga.chapters[args.chapter]
+    source.load_chapter(chapter)
+
+    # save chapter
+    print('Saving "{}" - {:03d}...'.format(args.manga, args.chapter))
+    folder = '{} - {:03d}'.format(manga.name, args.chapter).replace(' ', '_')
+    if isdir(folder):
+        shutil.rmtree(folder)
+    source.save_chapter(chapter, folder)
