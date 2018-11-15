@@ -13,6 +13,10 @@ import argparse
 def get_args():
     parser = argparse.ArgumentParser(description='Download pictures from a \
                                      scan on lelscan')
+    parser.add_argument('-i', '--interactive',
+                        type=bool,
+                        required=False,
+                        help='choose this option to select from choices')
     parser.add_argument('-s', '--source',
                         type=str,
                         required=True,
@@ -155,10 +159,26 @@ class Scantrad(Source):
             self.mangas[title] = Manga(title, url)
  
     def load_manga_chapters(self, manga):
-        raise NotImplementedError('please implement this function')
+        d = pq(url=manga.url)
+        item_list = d('#project-chapters-list li')
+        for item in item_list.items():
+            url = item('.buttons a:nth-child(1)').attr.href
+            chapter_number = int(item('.chapter-number').text().replace('#', ''))
+            manga.chapters[chapter_number] = Chapter(chapter_number, url)
 
     def load_chapter(self, chapter):
-        raise NotImplementedError('please implement this function')
+        d = pq(url=chapter.url)
+        # get the pages links containing the pictures and remove prev/next links
+        options = d.items('select.mobile[name="chapter-page"] option')
+        chapter.pages = [Page(i + 1, option.attr.value) for i, option in enumerate(options)]
+        # get the images
+        for page in chapter.pages:
+            # download page
+            d = pq(url=page.url)
+            # download image
+            src = d('div.image a img').attr.src
+            page.image = Image(page.number, urljoin(self.base_url(), src))
+            page.image.download()
 
 
 class MangaReader(Source):
