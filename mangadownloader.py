@@ -105,8 +105,6 @@ class Source:
         raise NotImplementedError('please implement this function')
 
     def save_chapter(self, chapter, folder):
-        if isdir(folder):
-            shutils.rmtree(folder)
         mkdir(folder)
         for page in chapter.pages:
             src = page.image.url
@@ -189,10 +187,10 @@ class Scantrad(Source):
 
 class MangaReader(Source):
     def __init__(self):
-        super().__init__('http://www.manga.reader.net')
+        super().__init__('https://www.mangareader.net')
 
     def load_mangas(self):
-        d = pq(url=self.base_url() + '/alphabetical')
+        d = pq(url=urljoin(self.base_url(), '/alphabetical'))
         links = d('ul.series_alpha li a')
         for link in links.items():
             title = link.text()
@@ -200,10 +198,26 @@ class MangaReader(Source):
             self.mangas[title] = Manga(title, url)
 
     def load_manga_chapters(self, manga):
-        raise NotImplementedError('please implement this function')
+        d = pq(url=urljoin(self.base_url(), manga.url))
+        links = d('#listing a')
+        for link in links.items():
+            url = link.attr.href
+            chapter_number = int(url.split('/')[-1])
+            manga.chapters[chapter_number] = Chapter(chapter_number, url)
 
     def load_chapter(self, chapter):
-        raise NotImplementedError('please implement this function')
+        d = pq(url=urljoin(self.base_url(), chapter.url))
+        # get the pages links containing the pictures and remove prev/next links
+        options = d.items('#pageMenu option')
+        chapter.pages = [Page(i + 1, option.attr.value) for i, option in enumerate(options)]
+        # get the images
+        for page in chapter.pages:
+            # download page
+            d = pq(url=urljoin(self.base_url(), page.url))
+            # download image
+            src = d('#imageholder img').attr.src
+            page.image = Image(page.number, urljoin(self.base_url(), src))
+            page.image.download()
 
 
 class Input:
@@ -298,25 +312,33 @@ if __name__ == '__main__':
     }
     args = get_args(sources.keys())
     source = Input.select_source(sources, args.source)
+
     # load mangas
     print('Loading manga list...')
     source.load_mangas()
+    manga = Input.select_manga(source.mangas, args.manga)
 
     # load manga chapters
-    print('Loading "{}" chapters...'.format(args.manga))
-    manga = Input.select_manga(source.mangas, args.manga)
-    source.load_manga_chapters(manga)
-
-    # load chapter
     print('Loading chapters...')
+    source.load_manga_chapters(manga)
     chapters_number = Input.select_chapters(manga.chapters, args.chapters)
+
+    # download and save chapters
     for number in chapters_number:
         chapter = manga.chapters[number]
-        print('Downloading chapter', chapter.number, 'of "{}"'.format(manga.name))
-        source.load_chapter(chapter)
-        # save chapter
-        print('Saving chapter', chapter.number, 'of "{}"'.format(manga.name))
+
         folder = '{} - {:03d}'.format(manga.name, chapter.number).replace(' ', '_')
-        if args.overwrite and isdir(folder):
-            shutil.rmtree(folder)
-        source.save_chapter(chapter, folder)
+        download = True
+        if isdir(folder):
+            if args.overwrite:
+                print('Deleting folder "{}"'.format(folder))
+                shutil.rmtree(folder)
+            else: 
+                print('Chapter already downloaded')
+                download = False
+        # save chapter
+        if download:
+            print('Downloading chapter', chapter.number, 'of "{}"'.format(manga.name))
+            source.load_chapter(chapter)
+            print('Saving chapter', chapter.number, 'of "{}"'.format(manga.name))
+            source.save_chapter(chapter, folder)
