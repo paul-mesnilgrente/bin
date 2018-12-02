@@ -213,9 +213,11 @@ class MangaReader(Source):
         # get the images
         for page in chapter.pages:
             # download page
+            print('page', urljoin(self.base_url(), page.url))
             d = pq(url=urljoin(self.base_url(), page.url))
             # download image
-            src = d('#imageholder img').attr.src
+            src = d('#imgholder img').attr.src
+            print('src', urljoin(self.base_url(), src))
             page.image = Image(page.number, urljoin(self.base_url(), src))
             page.image.download()
 
