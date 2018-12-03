@@ -35,7 +35,7 @@ alias pip_upgrade='sudo pip list --outdated --format=freeze 2> /dev/null | cut -
 alias my_alert='notify-send --urgency=low \
                             -i "$([ $? = 0 ] && echo terminal || echo error)" \
                             "$(history|tail -n2|head -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"; \
-                paplay /usr/share/sounds/ubuntu/notifications/Mallet.ogg'
+                paplay /usr/share/sounds/ubuntu/stereo/message.ogg'
 alias check_boot='[ -d /sys/firmware/efi ] && echo UEFI || echo BIOS'
 alias publicip='curl ipinfo.io/ip'
 
