@@ -51,6 +51,11 @@ class Image:
         with open(path, 'wb') as f:
             self.response.raw.decode_content = True
             shutil.copyfileobj(self.response.raw, f)
+
+    def download_and_save(self, folder):
+        self.download()
+        self.save(folder)
+        del self.response
  
 
 class Page:
@@ -101,7 +106,7 @@ class Source:
     def load_manga_chapters(self, manga):
         raise NotImplementedError('please implement this function')
 
-    def load_chapter(self, chapter):
+    def load_and_save_chapter(self, chapter):
         raise NotImplementedError('please implement this function')
 
     def save_chapter(self, chapter, folder):
@@ -134,7 +139,8 @@ class Lelscan(Source):
                 chapter_number = float(option.text())
             manga.chapters[chapter_number] = Chapter(chapter_number, url)
 
-    def load_chapter(self, chapter):
+    def load_and_save_chapter(self, chapter, folder):
+        mkdir(folder)
         d = pq(url=chapter.url)
         # get the pages links containing the pictures and remove prev/next links
         chapter.pages = [Page(i, link.attr.href) for i, link in enumerate(d.items('#navigation a'))]
@@ -147,7 +153,7 @@ class Lelscan(Source):
             # download image
             src = d('#image img').attr.src
             page.image = Image(page.number, urljoin(self.base_url(), src))
-            page.image.download()
+            page.image.download_and_save(folder)
 
 
 class Scantrad(Source):
@@ -170,7 +176,8 @@ class Scantrad(Source):
             chapter_number = int(item('.chapter-number').text().replace('#', ''))
             manga.chapters[chapter_number] = Chapter(chapter_number, url)
 
-    def load_chapter(self, chapter):
+    def load_and_save_chapter(self, chapter, folder):
+        mkdir(folder)
         d = pq(url=chapter.url)
         # get the pages links containing the pictures and remove prev/next links
         options = d.items('select.mobile[name="chapter-page"] option')
@@ -182,7 +189,7 @@ class Scantrad(Source):
             # download image
             src = d('div.image a img').attr.src
             page.image = Image(page.number, urljoin(self.base_url(), src))
-            page.image.download()
+            page.image.download_and_save(folder)
 
 
 class MangaReader(Source):
@@ -205,7 +212,8 @@ class MangaReader(Source):
             chapter_number = int(url.split('/')[-1])
             manga.chapters[chapter_number] = Chapter(chapter_number, url)
 
-    def load_chapter(self, chapter):
+    def load_and_save_chapter(self, chapter, folder):
+        mkdir(folder)
         d = pq(url=urljoin(self.base_url(), chapter.url))
         # get the pages links containing the pictures and remove prev/next links
         options = d.items('#pageMenu option')
@@ -217,7 +225,7 @@ class MangaReader(Source):
             # download image
             src = d('#imgholder img').attr.src
             page.image = Image(page.number, urljoin(self.base_url(), src))
-            page.image.download()
+            page.image.download_and_save(folder)
 
 
 class Input:
@@ -340,6 +348,4 @@ if __name__ == '__main__':
         # save chapter
         if download:
             print('Downloading chapter', chapter.number, 'of "{}"'.format(manga.name))
-            source.load_chapter(chapter)
-            print('Saving chapter', chapter.number, 'of "{}"'.format(manga.name))
-            source.save_chapter(chapter, folder)
+            source.load_and_save_chapter(chapter, folder)
