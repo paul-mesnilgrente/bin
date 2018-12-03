@@ -213,11 +213,9 @@ class MangaReader(Source):
         # get the images
         for page in chapter.pages:
             # download page
-            print('page', urljoin(self.base_url(), page.url))
             d = pq(url=urljoin(self.base_url(), page.url))
             # download image
             src = d('#imgholder img').attr.src
-            print('src', urljoin(self.base_url(), src))
             page.image = Image(page.number, urljoin(self.base_url(), src))
             page.image.download()
 
@@ -250,14 +248,14 @@ class Input:
 
     @staticmethod
     def convert_ranges(ranges):
-        chapters_str = chapters_str.lower().replace(' ', '')
-        lists_str = chapters_str.split(',')
+        chapters_str = ranges.lower().replace(' ', '')
+        lists_str = ranges.split(',')
         res = set()
         for item in lists_str:
-            if item.contains('-'):
+            if item.find('-') != -1:
                 begin = int(item.split('-')[0])
                 end = int(item.split('-')[1])
-                [res.add(i) for i in range(begin, end)]
+                [res.add(i) for i in range(begin, end + 1)]
             else:
                 try:
                     res.add(int(item))
@@ -324,6 +322,7 @@ if __name__ == '__main__':
     print('Loading chapters...')
     source.load_manga_chapters(manga)
     chapters_number = Input.select_chapters(manga.chapters, args.chapters)
+    print('Chapters', chapters_number, 'will be downloaded')
 
     # download and save chapters
     for number in chapters_number:

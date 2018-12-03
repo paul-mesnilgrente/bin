@@ -39,45 +39,8 @@ alias my_alert='notify-send --urgency=low \
 alias check_boot='[ -d /sys/firmware/efi ] && echo UEFI || echo BIOS'
 alias publicip='curl ipinfo.io/ip'
 
+# my python scripts
+alias mangadownloader.py='$HOME/.pyenv/versions/3.6.5/envs/mangadownloader/bin/python3 $HOME/bin/mangadownloader.py'
+
 # server
 alias occ='sudo -u www-data php /var/www/nextcloud/occ'
-
-# eosio
-alias druneos='docker run --rm \
---name eosio -d \
--p 8888:8888 \
--p 9876:9876 \
--v /tmp/work:/work \
--v /tmp/eosio/data:/mnt/dev/data \
--v /tmp/eosio/config:/mnt/dev/config \
-eosio/eos-dev  /bin/bash -c \
-"nodeos -e -p eosio \
---plugin eosio::producer_plugin \
---plugin eosio::history_plugin \
---plugin eosio::chain_api_plugin \
---plugin eosio::history_api_plugin \
---plugin eosio::http_plugin \
--d /mnt/dev/data \
---config-dir /mnt/dev/config \
---http-server-address=0.0.0.0:8888 \
---access-control-allow-origin=* \
---contracts-console"'
-alias dcleos='docker exec eosio /opt/eosio/bin/cleos --wallet-url http://localhost:8888'
-alias deosiocpp='docker exec eosio /opt/eosio/bin/eosiocpp'
-alias deos='docker container exec -it eosio /bin/bash'
-alias runeos='nodeos -e -p eosio \
---plugin eosio::producer_plugin \
---plugin eosio::history_plugin \
---plugin eosio::chain_api_plugin \
---plugin eosio::history_api_plugin \
---plugin eosio::http_plugin \
---http-server-address=0.0.0.0:8888 \
---access-control-allow-origin=* \
---contracts-console'
-
-# dev
-alias catkin_maked='catkin_make -DCMAKE_BUILD_TYPE=Debug'
-alias catkin_maket='catkin_make -DCMAKE_BUILD_TYPE=Debug run_tests_mario'
-alias catkin_make='catkin_make  -DCMAKE_BUILD_TYPE=Release'
-alias rrd='rosrun --prefix "gdb -q run --args"'
-alias rrv='rosrun --prefix "valgrind --leak-check=full"'
