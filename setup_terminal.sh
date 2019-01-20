@@ -15,7 +15,7 @@ source "$HOME/bin/conf/bashrc_end.sh"' >> ~/.bashrc
 fi
 sudo apt install -y tmux vim git python3-pip xclip \
                     cowsay cowsay-off fortune-mod lolcat \
-                    htop tree sl
+                    htop tree sl curl
 sudo pip3 install -U pip
 
 ######################################################
@@ -23,8 +23,7 @@ sudo pip3 install -U pip
 ######################################################
 # install NodeJS basics
 curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-sudo apt update
-sudo apt install nodejs
+sudo apt install -y nodejs
 # configure npm
 mkdir -p ~/.npm-global
 npm config set prefix '~/.npm-global'
@@ -40,29 +39,36 @@ npm install -g npm
 sudo apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
 libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
 xz-utils tk-dev
-if [ ! "$HOME/.pyenv" ]; then
+if [ ! -d "$HOME/.pyenv" ]; then
+    echo 'Installing pyenv'
     curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
     # activate pyenv in the script (already in bashrc_end.sh)
     export PATH="~/.pyenv/bin:$PATH"
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
 else
-    pyenv update
+    echo 'Updating pyenv'
+    pyenv update && echo 'OK'
 fi
 
 # install python versions
-pyenv versions | grep 3.6.5 > /dev/null
-if [ $? -ne 0 ]; then pyenv install 3.6.5; fi
-pyenv versions | grep 2.7.15 > /dev/null
-if [ $? -ne 0 ]; then pyenv install 2.7.15; fi
+if `pyenv versions | grep '3.6.5'`; then
+    pyenv install 3.6.5
+fi
+if `pyenv versions | grep '2.7.15'`; then
+    pyenv install 2.7.15
+fi
 # set global system for system-wise tools installation
 pyenv global system
 
 ######################################################
 # Install Joplin                                     #
 ######################################################
-npm list -g joplin | grep joplin > /dev/null
-previously_installed="${?}"
+if `npm list -g joplin | grep joplin`; then
+    previously_installed=0
+else
+    previously_installed=1
+fi
 npm install -g joplin
 if [ ! ${previously_installed} ]; then
     joplin config sync.target 5
@@ -108,7 +114,10 @@ function install_vim_plugin {
         git pull
         cd "$tmp"
     else
+        tmp=`pwd`
+        cd "$HOME/.vim/bundle"
         git clone --depth 1 "$1" "$plugin"
+        cd "$tmp"
     fi
 }
 
