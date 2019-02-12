@@ -34,7 +34,7 @@ sudo apt update && sudo apt -y upgrade
 log.py 'Install basic softwares and libraries'
     # oracle-java8-installer \
 sudo apt install -y \
-    easytag ttf-mscorefonts-installer \
+    easytag ttf-mscorefonts-installer fonts-font-awesome \
     vlc gimp gnome-chess grisbi gparted \
     sublime-text nextcloud-client telegram-desktop \
     nextcloud-client-nautilus darktable thunderbird \
@@ -61,6 +61,13 @@ sudo snap install --classic skype
 
 log.py 'Installing Slack'
 sudo snap install --classic slack
+
+log.py 'Installing mangadownloader'
+pyenv virtualenv mangadownloader
+pyenv activate mangadownloader
+pip install -U pip
+pip install requests pyquery
+pyenv deactivate
 
 require_action 'System :
     - Install languages
@@ -91,7 +98,9 @@ require_action 'Mozilla firefox :
 
 require_action 'Sublime text :
     - Install the package control (one click in sublime),
-    - Install markdown preview, TableEditor, LESS.'
+    - Install markdown preview, LESS.'
+git clone https://github.com/geniusupgrader/SublimeTableEditor \
+    ".config/sublime-text-3/Packages/Table Editor"
 
 require_action 'Launch and configure Nextcloud.'
 
