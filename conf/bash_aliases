@@ -38,6 +38,7 @@ alias my_alert='notify-send --urgency=low \
                 paplay /usr/share/sounds/ubuntu/stereo/message.ogg'
 alias check_boot='[ -d /sys/firmware/efi ] && echo UEFI || echo BIOS'
 alias publicip='curl ipinfo.io/ip'
+alias sync_music="rsync -arv paul-mesnilgrente.com:/home/Music/ $HOME/Music"
 
 # my python scripts
 alias mangadownloader.py='$HOME/.pyenv/versions/3.6.5/envs/mangadownloader/bin/python3 $HOME/bin/mangadownloader.py'
