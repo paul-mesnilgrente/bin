@@ -1,5 +1,5 @@
 # POWERLINE
-if [ "$TERM" != "linux" ]; then
+if [ $(uname) = "Linux" ]; then
     if type "powerline" &> /dev/null; then
         usr_prefix='/usr/local/lib'
         usr_suffix='dist-packages/powerline/bindings/bash/powerline.sh'
@@ -7,8 +7,13 @@ if [ "$TERM" != "linux" ]; then
             source "$usr_prefix/python3.6/$usr_suffix"
         fi
     fi
+elif [ $(uname) = "Darwin" ]; then
+    source /usr/local/lib/python3.7/site-packages/powerline/bindings/bash/powerline.sh
 fi
 
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
 source "${HOME}"/bin/tab_title.sh
 source "${HOME}"/bin/custom_output.sh
 "${HOME}"/bin/welcome_message.sh
@@ -26,12 +31,14 @@ if [ -d "${HOME}/.rbenv/bin" ]; then
         export PATH="$HOME/.rbenv/bin:$PATH"
     fi
     eval "$(rbenv init -)"
-else
-    echo "You should install rbenv."
 fi
-
+if type rbenv &> /dev/null; then
+    if [ $(uname) = 'Darwin' ]; then
+        eval "$(rbenv init -)"
+    fi
+fi
 # pyenv configuration
-if [ -d "${HOME}/.pyenv/bin" ]; then
+if [ -d "${HOME}/.pyenv" ]; then
     export PATH="${HOME}/.pyenv/bin:$PATH"
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"

@@ -1,19 +1,11 @@
 #!/bin/bash
 
-for package in cowsay fortune-mod; do
-    dpkg -s ${package} &> /dev/null
-    if [ $? -ne 0 ]; then
+for package in cowsay lolcat; do
+    if ! type ${package} &> /dev/null; then
         echo "Please install ${package} before to run $0"
         exit 1
     fi
 done
-echo "test" | lolcat &> /tmp/lolcat_error
-if [ $? -ne 0 ]; then
-    echo "Please install lolcat before to run $0"
-    echo "ERROR:"
-    cat /tmp/lolcat_error
-    exit 2
-fi
 
 # get files
 files=`cowsay -l | cut -d ':' -f 2`
@@ -24,4 +16,8 @@ let "number = ($RANDOM % $nb_file) + 1"
 
 # get the filename and display
 file=`echo $files | cut -d ' ' -f $number`
-fortune | cowsay -f $file | lolcat
+if type fortune &> /dev/null; then
+    fortune | cowsay -f $file | lolcat
+else
+    echo '' | cowsay -f $file | lolcat
+fi
