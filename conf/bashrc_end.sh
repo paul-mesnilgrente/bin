@@ -45,3 +45,7 @@ if [ -d "${HOME}/.pyenv" ]; then
 else
     echo "You should install pyenv."
 fi
+
+if type vim &> /dev/null; then
+    export EDITOR=vim
+fi
