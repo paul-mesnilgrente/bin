@@ -46,7 +46,7 @@ alias publicip='curl ipinfo.io/ip'
 alias sync_music="rsync -arv paul-mesnilgrente.com:/home/Music/ $HOME/Music"
 
 # my python scripts
-alias mangadownloader.py='$HOME/.pyenv/versions/3.7.5/envs/mangadownloader/bin/python3 $HOME/bin/mangadownloader.py'
+alias mangadownloader.py='$HOME/.pyenv/versions/3.7.2/envs/mangadownloader/bin/python3 $HOME/bin/mangadownloader.py'
 
 # server
 alias occ='sudo -u www-data php /var/www/nextcloud/occ'
