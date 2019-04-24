@@ -1,51 +1,54 @@
+"${HOME}/bin/welcome_message.sh"
+
+function source_file()
+{
+    [ -s "$1" ] && source "$1"
+    return $?
+}
+
+function add_folder_to_path()
+{
+    [ -d "$1" ] && \
+    echo $PATH | grep "$1" &> /dev/null && \
+    export PATH="$1:$PATH"
+    return $?
+}
+
 # POWERLINE
-if [ $(uname) = "Linux" ]; then
-    if type "powerline" &> /dev/null; then
-        usr_prefix='/usr/local/lib'
-        usr_suffix='dist-packages/powerline/bindings/bash/powerline.sh'
-        if [ -f "$usr_prefix/python3.6/$usr_suffix" ]; then
-            source "$usr_prefix/python3.6/$usr_suffix"
-        fi
+if type powerline &> /dev/null; then
+    if [ $(uname) = "Linux" ]; then
+        path="/usr/local/lib/python3.6/dist-packages/powerline/bindings/bash/powerline.sh"
+    elif [ $(uname) = "Darwin" ]; then
+        path="/usr/local/lib/python3.7/site-packages/powerline/bindings/bash/powerline.sh"
     fi
-elif [ $(uname) = "Darwin" ]; then
-    source /usr/local/lib/python3.7/site-packages/powerline/bindings/bash/powerline.sh
+    source_file "$path"
 fi
 
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
-source "${HOME}"/bin/tab_title.sh
-source "${HOME}"/bin/custom_output.sh
-"${HOME}"/bin/welcome_message.sh
+source_file "${HOME}/bin/tab_title.sh"
+source_file "${HOME}/bin/custom_output.sh"
+source_file "${HOME}/.bash_aliases"
 
-# use user global npm instead of the system one
-echo $PATH | grep '.npm-global' > /dev/null
-if [ $? -ne 0 ]; then
-    export PATH="$HOME/.npm-global/bin:$PATH"
-fi
+add_folder_to_path "$HOME/bin"
+add_folder_to_path "$HOME/.local/bin"
+add_folder_to_path "$HOME/.symfony" || echo 'You should install symfony.'
 
-# use user global npm instead of the system one
-if [ -d "${HOME}/.rbenv/bin" ]; then
-    echo $PATH | grep '.rbenv' > /dev/null
-    if [ $? -ne 0 ]; then
-        export PATH="$HOME/.rbenv/bin:$PATH"
-    fi
-    eval "$(rbenv init -)"
-fi
-if type rbenv &> /dev/null; then
-    if [ $(uname) = 'Darwin' ]; then
-        eval "$(rbenv init -)"
-    fi
-fi
+# nvm configuration
+[ -d "${HOME}/.nvm" ] && export NVM_DIR="${HOME}/.nvm" || echo 'You should install nvm.'
+source_file "${NVM_DIR}/nvm.sh"
+source_file "${NVM_DIR}/bash_completion"
+
+# rbenv configuration
+add_folder_to_path "$HOME/.rbenv/bin"
+type rbenv &> /dev/null && eval "$(rbenv init -)" || echo 'You should install rbenv.'
+
 # pyenv configuration
 if [ -d "${HOME}/.pyenv" ]; then
-    export PATH="${HOME}/.pyenv/bin:$PATH"
+    export PYENV_ROOT="$HOME/.pyenv"
+    add_folder_to_path "${PYENV_ROOT}/bin"
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
 else
     echo "You should install pyenv."
 fi
 
-if type vim &> /dev/null; then
-    export EDITOR=vim
-fi
+type vim &> /dev/null && export EDITOR=vim || echo 'You should install vim.'

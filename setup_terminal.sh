@@ -18,57 +18,27 @@ sudo apt install -y tmux vim git python3-pip xclip \
                     htop tree sl curl
 sudo pip3 install -U pip
 
+# Install symfony
+curl -sS https://get.symfony.com/cli/installer | bash
+
 ######################################################
-# Install NodeJS                                     #
+# Install NVM, NodeJS and NPM                        #
 ######################################################
-# install NodeJS basics
-curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-sudo apt install -y nodejs
-# configure npm
-mkdir -p ~/.npm-global
-npm config set prefix '~/.npm-global'
-# activate new NPM path (already configured in bashrc_end.sh)
-export PATH=~/.npm-global/bin:$PATH
-# update npm
+# Manual install of nvm 
+export NVM_DIR="${HOME}/.nvm"
+git clone https://github.com/creationix/nvm.git "$NVM_DIR"
+cd "${NVM_DIR}"
+git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)`
+source "${NVM_DIR}/nvm.sh"
+# install latest lts of node
+nvm install --lts
+# install/update npm
 npm install -g npm
-
-######################################################
-# Install Pyenv                                      #
-######################################################
-# install pyenv basics
-sudo apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
-libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
-xz-utils tk-dev
-if [ ! -d "$HOME/.pyenv" ]; then
-    echo 'Installing pyenv'
-    curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-    # activate pyenv in the script (already in bashrc_end.sh)
-    export PATH="~/.pyenv/bin:$PATH"
-    eval "$(pyenv init -)"
-    eval "$(pyenv virtualenv-init -)"
-else
-    echo 'Updating pyenv'
-    pyenv update && echo 'OK'
-fi
-
-# install python versions
-if `pyenv versions | grep '3.6.5'`; then
-    pyenv install 3.6.5
-fi
-if `pyenv versions | grep '2.7.15'`; then
-    pyenv install 2.7.15
-fi
-# set global system for system-wise tools installation
-pyenv global system
 
 ######################################################
 # Install Joplin                                     #
 ######################################################
-if `npm list -g joplin | grep joplin`; then
-    previously_installed=0
-else
-    previously_installed=1
-fi
+type joplin &> /dev/null && previously_installed=0 || previously_installed=1
 npm install -g joplin
 if [ ! ${previously_installed} ]; then
     joplin config sync.target 5
@@ -145,8 +115,10 @@ install_vim_plugin https://github.com/kien/ctrlp.vim
 ######################################################
 # Configure Bitwarden                                #
 ######################################################
-sudo snap install bw
-bw config server 'https://bitwarden.paul-mesnilgrente.com/'
+if [ $() = 'Linux' ]; then
+    sudo snap install bw
+    bw config server 'https://bitwarden.paul-mesnilgrente.com/'
+fi
 
 ######################################################
 # Configure Octave                                   #
@@ -159,4 +131,26 @@ install_config_file octaverc
 install_config_file bash_aliases
 install_config_file gitconfig
 
+######################################################
+# Install Pyenv                                      #
+######################################################
+# install pyenv basics
+sudo apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
+libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
+xz-utils tk-dev
+if [ ! -d "$HOME/.pyenv" ]; then
+    echo 'Installing pyenv'
+    curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+    # activate pyenv in the script (already in bashrc_end.sh)
+    export PATH="~/.pyenv/bin:$PATH"
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+else
+    echo 'Updating pyenv'
+    pyenv update && echo 'OK'
+fi
+
+# install python versions
+pyenv versions | grep '3.6.5'  &> /dev/null && pyenv install 3.6.5
+pyenv versions | grep '2.7.15' &> /dev/null && pyenv install 2.7.15
 pyenv global 3.6.5 2.7.15
