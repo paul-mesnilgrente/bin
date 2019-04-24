@@ -9,7 +9,7 @@ function source_file()
 function add_folder_to_path()
 {
     [ -d "$1" ] && \
-    echo $PATH | grep "$1" &> /dev/null && \
+    echo $PATH | grep "$1" &> /dev/null || \
     export PATH="$1:$PATH"
     return $?
 }
