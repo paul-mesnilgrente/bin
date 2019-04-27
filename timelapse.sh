@@ -1,18 +1,25 @@
 #!/bin/sh
 
-echo "############################################"
-echo "# Redimensionnement des photos             #"
-echo "############################################"
-i=1
-for FILE in `ls *.JPG`; do
-    mogrify -resize 1920x $FILE;
-    echo $i - $FILE;
-    i=`expr $i + 1`
-done
+whereis jhead > /dev/null
+if [ $? -ne 0 ]; then
+    sudo apt install jhead
+fi
 
-echo "############################################"
-echo "# Génération de la vidéo                   #"
-echo "############################################"
-# ffmpeg -start_number 0016709 -i G%07d.JPG -c:v libx264 -pix_fmt yuv420p timelapse.mp4
+whereis mencoder > /dev/null
+if [ $? -ne 0 ]; then
+    sudo apt install mencoder
+fi
+
+log.py 'Renommage des photos'
+jhead -n%Y%m%d-%H%M%S *.jpg
+
+log.py 'Save file list'
+ls -1tr | grep -v files.txt > files.txt
+
+log.py 'Create the video'
+mencoder -nosound -noskip -oac copy -ovc copy -o timelapse.avi -mf fps=20 'mf://@files.txt'
+
+log.py '# Génération de la vidéo'
+ffmpeg -i timelapse.avi -y -qscale 0 -vf scale=1920:1440,crop=1920:1080 timelapse_rescaled.avi
 
 exit 0

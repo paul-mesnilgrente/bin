@@ -34,10 +34,10 @@ sudo apt update && sudo apt -y upgrade
 log.py 'Install basic softwares and libraries'
     # oracle-java8-installer \
 sudo apt install -y \
-    easytag ttf-mscorefonts-installer \
+    easytag ttf-mscorefonts-installer fonts-font-awesome \
     vlc gimp gnome-chess grisbi gparted \
     sublime-text nextcloud-client telegram-desktop \
-    nextcloud-client-nautilus darktable nodejs \
+    nextcloud-client-nautilus darktable thunderbird \
     php mysql-server php-mysql php-xml php-intl
 
 log.py 'Installing composer'
@@ -62,6 +62,13 @@ sudo snap install --classic skype
 log.py 'Installing Slack'
 sudo snap install --classic slack
 
+log.py 'Installing mangadownloader'
+pyenv virtualenv mangadownloader
+pyenv activate mangadownloader
+pip install -U pip
+pip install requests pyquery
+pyenv deactivate
+
 require_action 'System :
     - Install languages
     - Modify the background
@@ -82,8 +89,6 @@ require_action 'Mozilla firefox :
     - Install bitwarden,
     - Remove bookmarks,
     - Synchro firefox,
-    - Go on https://startpage.com/ and set it up,
-    - Add starpage as default search engine,
     - Remove other search engines,
     - Configure wallabag,
     - Add the bookmark toolbar,
@@ -94,6 +99,8 @@ require_action 'Mozilla firefox :
 require_action 'Sublime text :
     - Install the package control (one click in sublime),
     - Install markdown preview, LESS.'
+git clone https://github.com/geniusupgrader/SublimeTableEditor \
+    ".config/sublime-text-3/Packages/Table Editor"
 
 require_action 'Launch and configure Nextcloud.'
 
