@@ -19,7 +19,16 @@ sudo apt install -y tmux vim git python3-pip xclip \
 sudo pip3 install -U pip
 
 # Install symfony
+######################################################
+# Install Composer and Symfony                       #
+######################################################
+# install composer
+${HOME}/bin/install_composer.sh
+# install symfony
 curl -sS https://get.symfony.com/cli/installer | bash
+# install autocompletion for composer and symfony tools
+export PATH="${HOME}/.local/bin:${PATH}"
+composer global require bamarni/symfony-console-autocomplete
 
 ######################################################
 # Install NVM, NodeJS and NPM                        #
@@ -34,6 +43,14 @@ source "${NVM_DIR}/nvm.sh"
 nvm install --lts
 # install/update npm
 npm install -g npm
+
+######################################################
+# Install jenv                                       #
+######################################################
+git clone https://github.com/jenv/jenv.git "${HOME}/.jenv"
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
+jenv enable-plugin export
 
 ######################################################
 # Install Joplin                                     #
@@ -149,6 +166,37 @@ else
     echo 'Updating pyenv'
     pyenv update && echo 'OK'
 fi
+
+######################################################
+# Install Phpbrew                                    #
+######################################################
+if [ $() = 'Darwin' ]; then
+    xcode-select --install
+    brew install automake autoconf curl pcre bison re2c mhash libtool icu4c gettext jpeg openssl libxml2 mcrypt gmp libevent
+    brew link icu4c
+    brew link --force openssl
+    brew link --force libxml2
+else
+    sudo apt-get install -y php php-cli
+    sudo apt-get install -y build-essential autoconf automake autotools-dev re2c
+    sudo apt-get install -y  \
+      libxml2 libxml2-dev \
+      libssl-dev openssl \
+      gettext \
+      libicu-dev \
+      libmcrypt-dev libmcrypt4 \
+      libmhash-dev libmhash2 \
+      libfreetype6 libfreetype6-dev \
+      libgd-dev libgd3 \
+      libpng-dev libpng16-16 \
+      libjpeg-dev libjpeg8-dev libjpeg8 \
+      libxpm4 libltdl7 libltdl-dev libreadline-dev
+fi
+curl -L -O https://github.com/phpbrew/phpbrew/raw/master/phpbrew
+chmod +x phpbrew
+mv phpbrew "${HOME}/.local/bin"
+phpbrew init
+
 
 # install python versions
 pyenv versions | grep '3.6.5'  &> /dev/null && pyenv install 3.6.5

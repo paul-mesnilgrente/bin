@@ -41,6 +41,16 @@ source_file "${NVM_DIR}/bash_completion"
 add_folder_to_path "$HOME/.rbenv/bin"
 type rbenv &> /dev/null && eval "$(rbenv init -)" || echo 'You should install rbenv.'
 
+# jenv configuration
+add_folder_to_path "$HOME/.jenv/bin" && eval "$(jenv init -)"
+
+# phpbrew configuration
+source_file "${HOME}/.phpbrew/bashrc"
+
+# composer setup
+add_folder_to_path "${HOME}/.composer/vendor/bin"
+type symfony-autocomplete &> /dev/null && eval "$(symfony-autocomplete)" || echo 'You should install symfony-autocomplete'
+
 # pyenv configuration
 if [ -d "${HOME}/.pyenv" ]; then
     export PYENV_ROOT="$HOME/.pyenv"
