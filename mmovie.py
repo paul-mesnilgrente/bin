@@ -15,7 +15,7 @@ if __name__ == '__main__':
         args.title.replace(' ', '_'), args.year)
     mkdir = 'mkdir "{}"'.format(folder)
     chown = 'chown debian-transmission:debian-transmission "{}"'.format(folder)
-    transmission_command = 'transmission-remote -ne -a {} -w "{}"'.format(
+    transmission_command = 'transmission-remote -ne -a "{}" -w "{}"'.format(
         args.url, folder)
     command = '{} && {} && {} && {}'.format(
         source_command,
