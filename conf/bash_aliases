@@ -22,6 +22,12 @@ alias sy_cleard='sy cache:clear --no-warmup --env=dev'
 alias sy_load_fixt='sy doctrine:fixtures:load'
 alias sy_gen_assets='sy_clearp && sy_cleard && sy assetic:dump --no-debug --env=prod'
 
+# ruby on rails
+alias rails='bundle exec rails'
+alias rake='bundle exec rake'
+alias rspec='bundle exec rspec'
+alias rubocop='bundle exec rubocop'
+
 # flask
 function fl_run {
     export FLASK_ENV=development
