@@ -58,3 +58,5 @@ alias mangadownloader.py='$HOME/.pyenv/versions/3.7.2/envs/mangadownloader/bin/p
 # server
 alias occ='sudo -u www-data php /var/www/nextcloud/occ'
 
+# pro
+alias vlogin='$(vault_login)'
