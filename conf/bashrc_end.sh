@@ -34,8 +34,9 @@ add_folder_to_path "$HOME/.symfony" || echo 'You should install symfony.'
 
 # nvm configuration
 [ -d "${HOME}/.nvm" ] && export NVM_DIR="${HOME}/.nvm" || echo 'You should install nvm.'
-source_file "${NVM_DIR}/nvm.sh"
-source_file "${NVM_DIR}/bash_completion"
+NVMSH_PATH="${NVM_DIR}/nvm.sh"
+[ $(uname) = "Darwin" ] && NVMSH_PATH="/usr/local/opt/nvm/nvm.sh" || source_file "${NVM_DIR}/bash_completion"
+source_file "${NVMSH_PATH}"
 
 # rbenv configuration
 add_folder_to_path "$HOME/.rbenv/bin"
@@ -57,6 +58,8 @@ if [ -d "${HOME}/.pyenv" ]; then
     add_folder_to_path "${PYENV_ROOT}/bin"
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
+elif [ $(uname) = 'Darwin' ]; then
+    type pyenv 2> /dev/null || echo "You should install pyenv."
 else
     echo "You should install pyenv."
 fi
