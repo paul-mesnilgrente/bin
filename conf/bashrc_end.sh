@@ -17,14 +17,14 @@ function add_folder_to_path()
 # POWERLINE
 if type powerline &> /dev/null; then
     if [ $(uname) = "Linux" ]; then
-        path="/usr/local/lib/python3.6/dist-packages/powerline/bindings/bash/powerline.sh"
+        file="/usr/local/lib/python3.6/dist-packages/powerline/bindings/bash/powerline.sh"
     elif [ $(uname) = "Darwin" ]; then
-        path="/usr/local/lib/python3.7/site-packages/powerline/bindings/bash/powerline.sh"
+        file="/usr/local/lib/python3.7/site-packages/powerline/bindings/bash/powerline.sh"
     fi
-    source_file "$path"
+    [ "${SHELL}" = '/bin/bash' ] && source_file "$file"
+    unset file
 fi
 
-source_file "${HOME}/bin/tab_title.sh"
 source_file "${HOME}/bin/custom_output.sh"
 source_file "${HOME}/.bash_aliases"
 
