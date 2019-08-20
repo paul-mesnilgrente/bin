@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# define namespace
+namespace=$(kubectl config view --minify --output 'jsonpath={..namespace}')
+[ "$namespace" = '' ] && namespace="default"
+
+# find a running pod
+label="$1"
+pod_name=$(kubectl get pod -l "$label" -o=jsonpath='{.items[?(@.status.phase == "Running")].metadata.name}')
+pod_name=$(echo "$pod_name" | cut -d ' ' -f 1)
+shift
+
+# error handling if a pod is not found
+if [ "$pod_name" = '' ]; then
+  echo "A running pod with the label \"$label\" could not be found in the namespace \"$namespace\"."
+  echo "Tested with: "
+  echo "kubectl get pod -l \"$label\" -o=jsonpath='{.items[?(@.status.phase == \"Running\")].metadata.name}' | cut -d ' ' -f 1"
+  exit 1
+fi
+
+kubectl -n "$namespace" exec -it "$pod_name" -- $@
+
+exit 0
