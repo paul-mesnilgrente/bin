@@ -62,3 +62,4 @@ alias occ='sudo -u www-data php /var/www/nextcloud/occ'
 
 # pro
 alias vlogin='$(vault_login)'
+alias kbtoken='kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}') | grep token: | sed s/token:// | sed 's/ //g' | pbcopy'
