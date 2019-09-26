@@ -12,24 +12,25 @@ if __name__ == '__main__':
     parser.add_argument('-y', '--year',  type=int,           required=True)
     args = parser.parse_args()
 
-    if (args.url is None and args.torrent is None) or (args.url is not None and args.torrent is not None):
-        raise Error('Please provide a torrent file OR a url')
+    if args.url is None and args.torrent is None:
+        raise Exception('Please provide a torrent file or a url')
+
+    if args.url is not None and args.torrent is not None:
+        raise Exception('Please provide a URL or a torrent, not both')
 
     if args.torrent is not None:
-        os.system("scp '{}' paul-mesnilgrente.com:/tmp/my.torrent".format(args.torrent.name))
+        os.system('scp "{}" paul-mesnilgrente.com:/tmp/my.torrent'.format(
+            args.torrent.name))
         args.torrent = '/tmp/my.torrent'
 
     source_command = 'source "$HOME/.transmission.auth"'
     folder = '/home/Videos/Movies/{}_({})'.format(
         args.title.replace(' ', '_'), args.year)
+    rm = 'rm -rf "{}"'.format(folder)
     mkdir = 'mkdir "{}"'.format(folder)
     chown = 'chown debian-transmission:debian-transmission "{}"'.format(folder)
     transmission_command = 'transmission-remote -ne -a "{}" -w "{}"'.format(
         args.url or args.torrent, folder)
-    command = '{} && {} && {} && {}'.format(
-        source_command,
-        mkdir,
-        chown,
-        transmission_command)
+    command = ' && '.join([source_command, rm, mkdir, chown, transmission_command])
     print(command)
     os.system("ssh paul-mesnilgrente.com '{}'".format(command))
