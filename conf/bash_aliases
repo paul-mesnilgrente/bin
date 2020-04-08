@@ -23,13 +23,6 @@ alias sy_cleard='sy cache:clear --no-warmup --env=dev'
 alias sy_load_fixt='sy doctrine:fixtures:load'
 alias sy_gen_assets='sy_clearp && sy_cleard && sy assetic:dump --no-debug --env=prod'
 
-# ruby
-alias rails='bundle exec rails'
-alias rake='bundle exec rake'
-alias rspec='bundle exec rspec'
-alias rubocop='bundle exec rubocop'
-alias jekyll='bundle exec jekyll'
-
 # flask
 function fl_run {
     export FLASK_ENV=development
@@ -42,6 +35,7 @@ alias gdb='gdb -q'
 alias octave-cli='octave-cli -q'
 alias taille='du -hs'
 alias ccat='pygmentize -g'
+alias slugify='sed -e "s/[^[:alnum:]]/-/g" | tr -s "-" | tr A-Z a-z'
 alias ppath='echo $PATH | tr ":" "\n"'
 alias pip_upgrade='sudo pip list --outdated --format=freeze 2> /dev/null | cut -d= -f1 | xargs sudo pip install -U'
 alias my_alert='notify-send --urgency=low \
@@ -59,8 +53,3 @@ alias mangadownloader.py='$HOME/.pyenv/versions/3.7.2/envs/mangadownloader/bin/p
 
 # server
 alias occ='sudo -u www-data php /var/www/nextcloud/occ'
-
-# pro
-alias vlogin='$(vault_login)'
-alias kbtoken='kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}') | grep token: | sed s/token:// | sed 's/ //g' | pbcopy'
-alias knife='bundle exec knife'
