@@ -31,26 +31,3 @@ set t_Co=256
 " COLOR SCHEMES : https://github.com/flazz/vim-colorschemes
 colorscheme Monokai
 
-" MARKDOWN Highlighting : https://github.com/plasticboy/vim-markdown
-let g:vim_markdown_folding_disabled = 1
-let g:vim_markdown_math = 1
-
-" MARKDOWN PREVIEW : https://github.com/JamshedVesuna/vim-markdown-preview
-let vim_markdown_preview_github=1 " github renderer (need internet access)
-
-" CPP HIGHLIGHTING : https://github.com/octol/vim-cpp-enhanced-highlight
-let g:cpp_class_scope_highlight = 1
-let g:cpp_member_variable_highlight = 1
-let g:cpp_concepts_highlight = 1
-
-" SYNTASTIC : https://github.com/vim-syntastic/syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_cpp_check_header = 1
-let g:syntastic_cpp_include_dirs = ['/usr/include/eigen3']
