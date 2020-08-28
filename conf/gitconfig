@@ -22,3 +22,7 @@
     clean = git-lfs clean -- %f
 [merge]
 	tool = smerge
+[pull]
+	rebase = true
+[commit]
+  template = ~/.config/git/.gitmessage

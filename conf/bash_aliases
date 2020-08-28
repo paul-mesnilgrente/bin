@@ -53,3 +53,29 @@ alias mangadownloader.py='$HOME/.pyenv/versions/3.7.2/envs/mangadownloader/bin/p
 
 # server
 alias occ='sudo -u www-data php /var/www/nextcloud/occ'
+
+# development
+alias glfa='gl && gfa'
+alias rw='tmux rename-window $(basename $(pwd))'
+alias kgih='kgi | tr -s " " | cut -d " " -f 2'
+kgpy() {
+  pod_name=$(k1stpod $1)
+  kgp -oyaml $pod_name
+}
+psubl() {
+  project=`basename $(pwd)`
+  projects_path='/Users/paulmesnilgrente/Library/Application Support/Sublime Text 3/Packages/User/Projects'
+  project_path="${projects_path}/${project}.sublime-project"
+  if [ -f "$project_path" ]; then
+    echo "Opening the \"$project\" project"
+    subl --project "$project_path"
+  else
+    echo "The project $project was not found"
+  fi
+}
+cw() {
+  z $@ && rw
+  if [ $? -eq 0 -a $# -gt 1 -a "$1" = '-s' ]; then
+    subl --command 'prompt_select_workspace'
+  fi
+}
